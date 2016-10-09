@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="./WEB-INF/templates/app_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <h:form>
+            <b:inputText placeholder="Type something here..." value="#{twitterSearch.text}">
+                <f:facet name="prepend">
+                    <b:iconAwesome name="search" />
+                </f:facet>
+                <f:facet name="append">
+                    <b:commandButton value="Search" look="success"  action="#{twitterSearch.search}" update="@form:results" />
+                </f:facet>
+            </b:inputText>
+        </h:form>
+        <b:panel id="results" title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
+                <ui:repeat var="tweet" value="#{twitterSearch.result}">
+                    <b:well>
+                        <h3>Well Header</h3>
+                        <h:outputText value="${tweet.text}"/>
+                    </b:well>
+                </ui:repeat>
+            </b:panel>
+        
+    </ui:define>
+    
+</ui:composition>

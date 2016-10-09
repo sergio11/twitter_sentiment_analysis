@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <context-param>
+        <param-name>BootsFaces_THEME</param-name>
+        <param-value>flatly</param-value>
+    </context-param>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    <env-entry>
-        <env-entry-name>TWITTER_OAUTH_CONSUMER_KEY</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>please enter value here</env-entry-value>
-    </env-entry>
-    <env-entry>
-        <env-entry-name>TWITTER_OAUTH_CONSUMER_SECRET</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>please enter value here</env-entry-value>
-    </env-entry>
-    <env-entry>
-        <env-entry-name>TWITTER_OAUTH_ACCESS_TOKEN</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>please enter value here</env-entry-value>
-    </env-entry>
-    <env-entry>
-        <env-entry-name>TWITTER_OAUTH_ACCESS_TOKEN_SECRET</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>please enter value here</env-entry-value>
-    </env-entry>
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
 </web-app>

@@ -5,12 +5,10 @@
  */
 package ejb;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import mapper.TweetDataMapper;
 import models.Tweet;
@@ -29,24 +27,16 @@ import twitter4j.conf.ConfigurationBuilder;
 @Stateless
 public class TwitterSearchBean implements TwitterSearchBeanLocal {
     
-    @Resource(name="TWITTER_OAUTH_CONSUMER_KEY")
-    private String consumerKey;
-    @Resource(name="TWITTER_OAUTH_CONSUMER_SECRET")
-    private String consumerSecret;
-    @Resource(name="TWITTER_OAUTH_ACCESS_TOKEN")
-    private String consumerAccessToken;
-    @Resource(name="TWITTER_OAUTH_ACCESS_TOKEN_SECRET")
-    private String consumerAccessTokenSecret;
     private Twitter twitter;
     private final TweetDataMapper mapper = new TweetDataMapper();
     
     @PostConstruct
     public void init() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true).setOAuthConsumerKey(consumerKey)
-                .setOAuthConsumerSecret(consumerSecret)
-                .setOAuthAccessToken(consumerAccessToken)
-                .setOAuthAccessTokenSecret(consumerAccessTokenSecret);
+        cb.setDebugEnabled(true).setOAuthConsumerKey("please enter text here")
+                .setOAuthConsumerSecret("please enter text here")
+                .setOAuthAccessToken("please enter text here")
+                .setOAuthAccessTokenSecret("please enter text here");
         TwitterFactory tf = new TwitterFactory(cb.build());
         twitter = tf.getInstance();
     }
