@@ -5,12 +5,15 @@
  */
 package ejb;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import mapper.TweetDataMapper;
+import models.Sentiment;
 import models.Tweet;
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -26,17 +29,19 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 @Stateless
 public class TwitterSearchBean implements TwitterSearchBeanLocal {
-    
+    @EJB
+    private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
+   
     private Twitter twitter;
     private final TweetDataMapper mapper = new TweetDataMapper();
-    
+   
     @PostConstruct
     public void init() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true).setOAuthConsumerKey("please enter text here")
-                .setOAuthConsumerSecret("please enter text here")
-                .setOAuthAccessToken("please enter text here")
-                .setOAuthAccessTokenSecret("please enter text here");
+        cb.setDebugEnabled(true).setOAuthConsumerKey("please enter key here")
+                .setOAuthConsumerSecret("please enter key here")
+                .setOAuthAccessToken("please enter key here")
+                .setOAuthAccessTokenSecret("please enter key here");
         TwitterFactory tf = new TwitterFactory(cb.build());
         twitter = tf.getInstance();
     }
@@ -45,12 +50,17 @@ public class TwitterSearchBean implements TwitterSearchBeanLocal {
     public List<Tweet> search(final String keyword) {
         Query query = new Query(keyword + " -filter:retweets -filter:links -filter:replies -filter:images");
         query.setCount(20);
-        query.setLocale("es");
-        query.setLang("es");
+        query.setLocale("en");
+        query.setLang("en");
         try {
             QueryResult queryResult = twitter.search(query);
-            List<Status> tweets = queryResult.getTweets();
-            return (List<Tweet>) mapper.transform(tweets);
+            List<Status> tweetsStatus = queryResult.getTweets();
+            Collection<Tweet> tweets = mapper.transform(tweetsStatus);
+            for(Tweet tweet: tweets){
+                Sentiment sentiment = sentimentAnalyzerBean.findSentiment(tweet.getText());
+                tweet.setSentiment(sentiment);
+            }
+            return (List<Tweet>) tweets;
         } catch (TwitterException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);

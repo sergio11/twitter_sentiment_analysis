@@ -19,6 +19,7 @@ public class Tweet {
     private String lang;
     private Integer reTweetCount;
     private String text;
+    private Sentiment sentiment;
 
     public Date getCreateAt() {
         return createAt;
@@ -67,7 +68,13 @@ public class Tweet {
     public void setText(String text) {
         this.text = text;
     }
-    
-    
+
+    public Sentiment getSentiment() {
+        return sentiment;
+    }
+
+    public void setSentiment(Sentiment sentiment) {
+        this.sentiment = sentiment;
+    }
     
 }
