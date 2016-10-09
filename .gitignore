@@ -10,3 +10,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/ejercicio1-ejb/target/
+/ejercicio1-web/target/
+/ejercicio1-ear/target/

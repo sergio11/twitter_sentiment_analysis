@@ -17,8 +17,6 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <core.nlp.version>3.6.0</core.nlp.version>
-        <twitter4j.version>4.0.5</twitter4j.version>
         <bootsfaces.version>0.9.2-SNAPSHOT</bootsfaces.version>
     </properties>
     
@@ -28,17 +26,6 @@
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>${core.nlp.version}</version>
-            <classifier>models-spanish</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.twitter4j</groupId>
-            <artifactId>twitter4j-core</artifactId>
-            <version>${twitter4j.version}</version>
         </dependency>
         <dependency>
             <groupId>net.bootsfaces</groupId>
