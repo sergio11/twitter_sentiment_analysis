@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb;
+package analyzer;
 
-import java.util.List;
 import javax.ejb.Local;
-import models.Tweet;
+import models.Sentiment;
 
 /**
  *
  * @author sergio
  */
 @Local
-public interface TwitterSearchBeanLocal {
+public interface SentimentAnalyzerBeanLocal {
 
-    List<Tweet> search(final String topic);
+    Sentiment findSentiment(final String text);
     
 }

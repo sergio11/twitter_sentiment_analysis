@@ -6,15 +6,29 @@
 package models;
 
 import java.io.Serializable;
+import java.util.List;
+import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author sergio
  */
+@Entity
+@Table(name="topics")
 public class Topic implements Serializable{
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @OneToMany(cascade=ALL, mappedBy="tweets")
+    private List<Tweet> tweets;
 
     public Topic(String name) {
         this.name = name;
@@ -32,7 +46,13 @@ public class Topic implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-    
-    
+
+    public List<Tweet> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
+    }
     
 }

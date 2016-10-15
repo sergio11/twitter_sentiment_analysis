@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb;
+package facade;
 
+import dao.TopicDAOBeanLocal;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSConnectionFactory;
@@ -20,15 +22,21 @@ import models.Topic;
  */
 @Stateless
 public class FacadeBean implements FacadeBeanLocal {
+    
     @Resource(mappedName = "jms/QueueReceptor")
     private Queue queueReceptor;
     @Inject
     @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
     private JMSContext context;
+    @EJB
+    private TopicDAOBeanLocal topicDAOBean;
 
     @Override
     public void analyzeTopic(String text) {
         Topic topic = new Topic(text);
+        //save topic
+        topicDAOBean.persist(topic);
+        // enqueue message
         ObjectMessage message = 
                   context.createObjectMessage(topic);
         context.createProducer().send(queueReceptor, message);

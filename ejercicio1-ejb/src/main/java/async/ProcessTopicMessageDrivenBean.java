@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb;
+package async;
 
+import search.TwitterSearchBeanLocal;
+import analyzer.SentimentAnalyzerBeanLocal;
+import dao.TweetDAOBeanLocal;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
@@ -35,6 +38,8 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     private TwitterSearchBeanLocal twitterSearchBean;
     @EJB
     private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
+    @EJB
+    private TweetDAOBeanLocal tweetDAOBean;
     
     @Override
     public void onMessage(Message message) {
@@ -49,6 +54,7 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 tweet.setSentiment(sentiment);
                 tweet.setTopic(topic);
             }
+            tweetDAOBean.persist(tweets);
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
         }   

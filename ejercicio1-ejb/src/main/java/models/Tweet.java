@@ -7,13 +7,27 @@ package models;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author sergio
  */
+@Entity
+@Table(name="tweets")
 public class Tweet implements Serializable{
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date createAt;
     private Double lat;
     private Double lon;
@@ -21,6 +35,8 @@ public class Tweet implements Serializable{
     private Integer reTweetCount;
     private String text;
     private Sentiment sentiment;
+    @ManyToOne
+    @JoinColumn(name="topic_id", nullable=false)
     private Topic topic;
 
     public Date getCreateAt() {

@@ -3,18 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb;
+package dao;
 
+import java.util.List;
 import javax.ejb.Local;
-import models.Sentiment;
+import models.Tweet;
 
 /**
  *
  * @author sergio
  */
 @Local
-public interface SentimentAnalyzerBeanLocal {
+public interface TweetDAOBeanLocal {
 
-    Sentiment findSentiment(final String text);
+    void persist(final Tweet tweet);
+    void persist(List<Tweet> tweets);
     
 }
