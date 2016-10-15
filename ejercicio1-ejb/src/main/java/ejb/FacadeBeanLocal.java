@@ -5,17 +5,15 @@
  */
 package ejb;
 
-import java.util.List;
 import javax.ejb.Local;
-import models.Tweet;
 
 /**
  *
  * @author sergio
  */
 @Local
-public interface TwitterSearchBeanLocal {
+public interface FacadeBeanLocal {
 
-    List<Tweet> search(final String topic);
+    void analyzeTopic(String topic);
     
 }

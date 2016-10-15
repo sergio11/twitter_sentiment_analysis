@@ -5,13 +5,14 @@
  */
 package models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author sergio
  */
-public class Tweet {
+public class Tweet implements Serializable{
     
     private Date createAt;
     private Double lat;
@@ -20,6 +21,7 @@ public class Tweet {
     private Integer reTweetCount;
     private String text;
     private Sentiment sentiment;
+    private Topic topic;
 
     public Date getCreateAt() {
         return createAt;
@@ -76,5 +78,15 @@ public class Tweet {
     public void setSentiment(Sentiment sentiment) {
         this.sentiment = sentiment;
     }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+    
+    
     
 }

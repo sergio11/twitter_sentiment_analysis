@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import mapper.TweetDataMapper;
-import models.Sentiment;
 import models.Tweet;
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -29,8 +27,7 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 @Stateless
 public class TwitterSearchBean implements TwitterSearchBeanLocal {
-    @EJB
-    private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
+    
    
     private Twitter twitter;
     private final TweetDataMapper mapper = new TweetDataMapper();
@@ -56,10 +53,6 @@ public class TwitterSearchBean implements TwitterSearchBeanLocal {
             QueryResult queryResult = twitter.search(query);
             List<Status> tweetsStatus = queryResult.getTweets();
             Collection<Tweet> tweets = mapper.transform(tweetsStatus);
-            for(Tweet tweet: tweets){
-                Sentiment sentiment = sentimentAnalyzerBean.findSentiment(tweet.getText());
-                tweet.setSentiment(sentiment);
-            }
             return (List<Tweet>) tweets;
         } catch (TwitterException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
