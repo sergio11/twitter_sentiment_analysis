@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -31,8 +32,15 @@ public class TopicDAOBean implements TopicDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
-    
-    
 
+    @Override
+    public List<Topic> all() {
+        try {
+            return em.createNamedQuery("Topic.all").getResultList();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
     
 }

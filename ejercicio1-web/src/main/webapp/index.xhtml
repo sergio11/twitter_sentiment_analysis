@@ -18,15 +18,18 @@
                 </f:facet>
             </b:inputText>
         </h:form>
-        <b:panel id="results" title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                <ui:repeat var="tweet" value="#{twitterSearch.result}">
-                    <b:well>
-                        <h3>Sentiment: ${tweet.sentiment.value}</h3>
-                        <h:outputText value="${tweet.text}"/>
-                    </b:well>
-                </ui:repeat>
-            </b:panel>
-        
+        <b:row id="results">
+            <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
+                <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
+                    <ui:repeat var="tweet" value="#{twitterSearch.result}">
+                        <b:well>
+                            <h3>Sentiment: ${tweet.sentiment.value}</h3>
+                            <h:outputText value="${tweet.text}"/>
+                        </b:well>
+                    </ui:repeat>
+                </b:panel>
+            </c:if>
+        </b:row>
     </ui:define>
     
 </ui:composition>

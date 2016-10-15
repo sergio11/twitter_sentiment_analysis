@@ -6,6 +6,7 @@
 package facade;
 
 import dao.TopicDAOBeanLocal;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -41,5 +42,12 @@ public class FacadeBean implements FacadeBeanLocal {
                   context.createObjectMessage(topic);
         context.createProducer().send(queueReceptor, message);
     }
+
+    @Override
+    public List<Topic> getTopics() {
+        return topicDAOBean.all();
+    }
+    
+    
     
 }

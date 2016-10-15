@@ -5,7 +5,7 @@
  */
 package beans;
 
-import ejb.TwitterSearchBeanLocal;
+import facade.FacadeBeanLocal;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,8 +27,8 @@ import models.Tweet;
 public class TwitterSearchManagedBean implements Serializable {
     
     @EJB
-    private TwitterSearchBeanLocal twitterSearchBean;
-
+    private FacadeBeanLocal facadeBean;
+    
     private String text;
     private List<Tweet> result;
 
@@ -51,11 +51,12 @@ public class TwitterSearchManagedBean implements Serializable {
 
     public void search(){
         try {
-            result = twitterSearchBean.search(text);
+            // analyze topic
+            facadeBean.analyzeTopic(text);
             // add confirmation message
             FacesMessage message = new FacesMessage();
             message.setSeverity(FacesMessage.SEVERITY_INFO);
-            message.setDetail("La consulta ha obtenido " + result.size() + " tweets");
+            message.setDetail("Analizando tema:" + text);
             this.addMessage(message);
         } catch(EJBException e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);

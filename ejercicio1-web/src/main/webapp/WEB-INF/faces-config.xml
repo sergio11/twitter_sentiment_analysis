@@ -13,10 +13,4 @@
         <base-name>messages</base-name>
         <var>i18n</var>
     </resource-bundle>
-    
-    <managed-bean>
-        <managed-bean-name>now</managed-bean-name>
-        <managed-bean-class>java.util.Date</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
 </faces-config>

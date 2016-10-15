@@ -5,7 +5,9 @@
  */
 package facade;
 
+import java.util.List;
 import javax.ejb.Local;
+import models.Topic;
 
 /**
  *
@@ -15,5 +17,6 @@ import javax.ejb.Local;
 public interface FacadeBeanLocal {
 
     void analyzeTopic(String topic);
+    List<Topic> getTopics();
     
 }

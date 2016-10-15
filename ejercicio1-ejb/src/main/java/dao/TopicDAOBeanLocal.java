@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.List;
 import javax.ejb.Local;
 import models.Topic;
 
@@ -16,5 +17,7 @@ import models.Topic;
 public interface TopicDAOBeanLocal {
 
     void persist(final Topic topic);
+
+    List<Topic> all();
     
 }
