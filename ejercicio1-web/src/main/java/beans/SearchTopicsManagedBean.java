@@ -30,7 +30,7 @@ public class SearchTopicsManagedBean implements Serializable {
     private FacadeBeanLocal facadeBean;
     private List<Topic> topics;
     private String topicsCSV;
-    private List<Topic> topicsSelected;
+    private List<String> topicsSelected;
     
     @PostConstruct
     protected void init(){
@@ -53,16 +53,15 @@ public class SearchTopicsManagedBean implements Serializable {
         return topicsCSV;
     }
 
-    public List<Topic> getTopicsSelected() {
+    public List<String> getTopicsSelected() {
         return topicsSelected;
     }
 
-    public void setTopicsSelected(List<Topic> topicsSelected) {
+    public void setTopicsSelected(List<String> topicsSelected) {
+        Logger.getLogger("ostias").log(Level.INFO, "Topics Selected: " + topicsSelected);
         this.topicsSelected = topicsSelected;
     }
-    
-    
-    
+
     public void search(){}
     
    

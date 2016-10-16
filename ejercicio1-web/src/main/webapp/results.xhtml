@@ -9,27 +9,31 @@
 
     <ui:define name="content">
         <h:form>
-            <b:inputText 
-                placeholder="select topic ..."
-                value="#{searchTopicBean.topicsSelected}"
-                tags="true"
-                tiny-screen="full-width"
-                typeahead="true"
-                typeahead-highlight="true"
-                typeahead-limit="10"
-                typeahead-values="#{searchTopicBean.topicsCSV}" >
-                 <f:facet name="prepend">
-                    <b:iconAwesome name="search" />
-                </f:facet>
-                <f:facet name="append">
-                    <b:commandButton value="Search" look="success"  action="#{searchTopicBean.search}" update="@form:results" />
-                </f:facet>
-            </b:inputText>
+            <b:row>
+                <b:inputText 
+                    placeholder="select topic ..."
+                    value="#{searchTopicBean.topicsSelected}"
+                    tags="true"
+                    tiny-screen="full-width"
+                    typeahead="true"
+                    typeahead-highlight="true"
+                    typeahead-limit="10"
+                    typeahead-values="#{searchTopicBean.topicsCSV}">
+                    <f:converter converterId="tagsConverter" />
+                    <f:facet name="prepend">
+                        <b:iconAwesome name="search" />
+                    </f:facet>
+                    <f:facet name="append">
+                        <b:commandButton value="Search" look="success"  action="#{searchTopicBean.search}" update="@form:results" />
+                    </f:facet>
+                </b:inputText>
+            </b:row>
             <b:row id="results">
+                <b:messages />
                 <c:if test="${not empty searchTopicBean.topicsSelected}">
                     <ui:repeat var="topic" value="#{searchTopicBean.topicsSelected}">
                         <b:panel  title="Result for topic #{topic}" collapsible="false" look="info" col-md="6">
-                        
+
                         </b:panel>
                     </ui:repeat>
                 </c:if>
