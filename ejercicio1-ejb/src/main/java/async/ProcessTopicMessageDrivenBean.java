@@ -9,6 +9,8 @@ import search.TwitterSearchBeanLocal;
 import analyzer.SentimentAnalyzerBeanLocal;
 import dao.TweetDAOBeanLocal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -40,12 +42,14 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
     @EJB
     private TweetDAOBeanLocal tweetDAOBean;
+   
     
     @Override
     public void onMessage(Message message) {
         try {
             ObjectMessage objectMessage = (ObjectMessage) message;
             Topic topic = (Topic) objectMessage.getObject();
+            Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.INFO, "Analizando término: " + topic.getName());
             // search tweets for topic
             List<Tweet> tweets = twitterSearchBean.search(topic.getName());
             // get sentiments for tweets

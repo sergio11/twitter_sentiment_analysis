@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import models.Tweet;
+import models.TweetsBySentiment;
 
 /**
  *
@@ -35,11 +37,25 @@ public class TweetDAOBean implements TweetDAOBeanLocal {
     @Override
     public void persist(List<Tweet> tweets) {
         try {
-            em.persist(tweets);
+            Iterator<Tweet> ite = tweets.iterator();
+            while(ite.hasNext())
+                persist(ite.next());
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<TweetsBySentiment> groupedBySentiment(final String topic) {
+        try{
+            return em.createNamedQuery("Tweets.GroupBy.TopicName", TweetsBySentiment.class).setParameter("topic", topic).getResultList();
+        }catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
     
 }

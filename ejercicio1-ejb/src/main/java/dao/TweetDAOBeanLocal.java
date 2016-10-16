@@ -8,6 +8,7 @@ package dao;
 import java.util.List;
 import javax.ejb.Local;
 import models.Tweet;
+import models.TweetsBySentiment;
 
 /**
  *
@@ -18,5 +19,7 @@ public interface TweetDAOBeanLocal {
 
     void persist(final Tweet tweet);
     void persist(List<Tweet> tweets);
+
+    List<TweetsBySentiment> groupedBySentiment(final String topic);
     
 }

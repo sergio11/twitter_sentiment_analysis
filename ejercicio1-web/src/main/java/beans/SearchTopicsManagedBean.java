@@ -57,7 +57,6 @@ public class SearchTopicsManagedBean implements Serializable {
     }
 
     public void setTopicsSelected(List<String> topicsSelected) {
-        Logger.getLogger("ostias").log(Level.INFO, "Topics Selected: " + topicsSelected);
         this.topicsSelected = topicsSelected;
     }
 

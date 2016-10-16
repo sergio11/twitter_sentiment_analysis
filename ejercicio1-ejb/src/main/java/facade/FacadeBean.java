@@ -6,6 +6,7 @@
 package facade;
 
 import dao.TopicDAOBeanLocal;
+import dao.TweetDAOBeanLocal;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -16,6 +17,8 @@ import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import models.Topic;
+import models.Tweet;
+import models.TweetsBySentiment;
 
 /**
  *
@@ -24,6 +27,7 @@ import models.Topic;
 @Stateless
 public class FacadeBean implements FacadeBeanLocal {
     
+    
     @Resource(mappedName = "jms/QueueReceptor")
     private Queue queueReceptor;
     @Inject
@@ -31,6 +35,8 @@ public class FacadeBean implements FacadeBeanLocal {
     private JMSContext context;
     @EJB
     private TopicDAOBeanLocal topicDAOBean;
+    @EJB
+    private TweetDAOBeanLocal tweetDAOBean;
 
     @Override
     public void analyzeTopic(String text) {
@@ -47,7 +53,11 @@ public class FacadeBean implements FacadeBeanLocal {
     public List<Topic> getTopics() {
         return topicDAOBean.all();
     }
-    
+
+    @Override
+    public List<TweetsBySentiment> groupedBySentiment(final String topic) {
+        return tweetDAOBean.groupedBySentiment(topic);
+    }
     
     
 }

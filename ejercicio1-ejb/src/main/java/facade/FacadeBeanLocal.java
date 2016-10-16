@@ -8,6 +8,8 @@ package facade;
 import java.util.List;
 import javax.ejb.Local;
 import models.Topic;
+import models.Tweet;
+import models.TweetsBySentiment;
 
 /**
  *
@@ -18,5 +20,6 @@ public interface FacadeBeanLocal {
 
     void analyzeTopic(String topic);
     List<Topic> getTopics();
+    List<TweetsBySentiment> groupedBySentiment(final String topic);
     
 }
