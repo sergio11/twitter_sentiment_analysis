@@ -11,20 +11,21 @@
         <h:form>
             <b:row>
                 <b:inputText 
-                    placeholder="select topic ..."
+                    placeholder="#{i18n['page.results.tags.placeholder']}"
                     value="#{searchTopicBean.topicsSelected}"
                     tags="true"
                     tiny-screen="full-width"
                     typeahead="true"
                     typeahead-highlight="true"
                     typeahead-limit="10"
-                    typeahead-values="#{searchTopicBean.topicsCSV}">
+                    typeahead-values="#{searchTopicBean.topicsCSV}"
+                    onchange="ajax:searchTopicBean.search()"
+                    update="@form:results"
+                    tooltip="#{i18n['page.results.tags.tooltip']}"
+                    tooltip-position="bottom">
                     <f:converter converterId="tagsConverter" />
                     <f:facet name="prepend">
                         <b:iconAwesome name="search" />
-                    </f:facet>
-                    <f:facet name="append">
-                        <b:commandButton value="Search" look="success"  action="#{searchTopicBean.search}" update="@form:results" />
                     </f:facet>
                 </b:inputText>
             </b:row>
@@ -40,5 +41,4 @@
             </b:row>
         </h:form>
     </ui:define>
-
 </ui:composition>

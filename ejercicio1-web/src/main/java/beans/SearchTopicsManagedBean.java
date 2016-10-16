@@ -42,7 +42,6 @@ public class SearchTopicsManagedBean implements Serializable {
             }
         });
         topicsCSV = StringUtils.join(topicNames, ",");
-        Logger.getLogger("ostias").log(Level.INFO, topicsCSV);
     }
 
     public List<Topic> getTopics() {
