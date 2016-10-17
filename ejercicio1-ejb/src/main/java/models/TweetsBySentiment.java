@@ -16,23 +16,22 @@ public class TweetsBySentiment implements Serializable {
     private Sentiment sentiment;
     private Integer tweets;
 
-    public TweetsBySentiment(Sentiment sentiment, Integer tweets) {
-        this.sentiment = sentiment;
+    public TweetsBySentiment(Integer sentiment, Integer tweets) {
+        this.sentiment = Sentiment.getFromValue(sentiment);
         this.tweets = tweets;
     }
 
     public TweetsBySentiment() {
     }
-  
 
     public Sentiment getSentiment() {
         return sentiment;
     }
 
-    public void setSentiment(Sentiment sentiment) {
-        this.sentiment = sentiment;
+    public void setSentiment(Integer sentiment) {
+        this.sentiment = Sentiment.getFromValue(sentiment);
     }
-
+    
     public Integer getTweets() {
         return tweets;
     }

@@ -7,14 +7,16 @@ package models;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -24,9 +26,23 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name="tweets")
-@NamedQueries({
-    @NamedQuery(name = "Tweets.GroupBy.TopicName", query = "SELECT A.sentiment, COUNT(A) FROM Tweet A WHERE A.topic.name = :topic GROUP BY A.sentiment")
-})
+@SqlResultSetMapping(
+    name = "TweetsBySentimentResult",
+    classes = {
+        @ConstructorResult(
+            targetClass = TweetsBySentiment.class,
+            columns = {
+                @ColumnResult(name = "sentiment"),
+                @ColumnResult(name = "tweets")
+            }
+        )
+    } 
+)
+@NamedNativeQuery(
+    name = "TweetsBySentiment",
+    query = "SELECT sentiment, COUNT(*) AS tweets from tweets A JOIN topics B ON(A.topic_id=B.id) WHERE UPPER(B.name) = 'KEANE' GROUP BY A.SENTIMENT",
+    resultSetMapping = "TweetsBySentimentResult"
+)
 public class Tweet implements Serializable{
     
     @Id

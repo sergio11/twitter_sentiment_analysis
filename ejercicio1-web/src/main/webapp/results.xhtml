@@ -20,7 +20,7 @@
                     typeahead-highlight="true"
                     typeahead-limit="10"
                     typeahead-values="#{searchTopicBean.topicsCSV}"
-                    onchange="ajax:searchTopicBean.search()"
+                    onchange="ajax:chartBean.update()"
                     update="@form:results"
                     tooltip="#{i18n['page.results.tags.tooltip']}"
                     tooltip-position="bottom">
@@ -35,7 +35,7 @@
                 <c:if test="${not empty searchTopicBean.topicsSelected}">
                     <ui:repeat var="topic" value="#{searchTopicBean.topicsSelected}">
                         <b:panel  title="Result for topic #{topic}" collapsible="false" look="info" col-md="6">
-                            <p:chart type="donut" model="#{chartBean.chartModel}" style="width:400px;height:300px" />
+                            <p:chart type="donut" model="#{chartBean.charts.get(topic)}" style="width:400px;height:300px" />
                         </b:panel>
                     </ui:repeat>
                 </c:if>
