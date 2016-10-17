@@ -27,7 +27,7 @@
                     <f:converter converterId="tagsConverter" />
                     <f:facet name="prepend">
                         <b:iconAwesome name="search" />
-                    </f:facet>
+                    </f:facet> 
                 </b:inputText>
             </b:row>
             <b:row id="results">
@@ -35,7 +35,14 @@
                 <c:if test="${not empty searchTopicBean.topicsSelected}">
                     <ui:repeat var="topic" value="#{searchTopicBean.topicsSelected}">
                         <b:panel  title="Result for topic #{topic}" collapsible="false" look="info" col-md="6">
-                            <p:chart type="donut" model="#{chartBean.charts.get(topic)}" style="width:400px;height:300px" />
+                            <b:row>
+                                <b:column col-md="6">
+                                    <p:chart type="donut" model="#{chartBean.donutCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
+                                </b:column>
+                                <b:column col-md="6">
+                                    <p:chart type="pie" model="#{chartBean.pieCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
+                                </b:column>
+                            </b:row>
                         </b:panel>
                     </ui:repeat>
                 </c:if>
