@@ -5,7 +5,8 @@
                 template="./WEB-INF/templates/app_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
         <h:form>
@@ -14,19 +15,21 @@
                     <b:iconAwesome name="search" />
                 </f:facet>
                 <f:facet name="append">
-                    <b:commandButton value="Search" look="success"  action="#{twitterSearch.search}" update="@form:results" />
+                    <b:commandButton 
+                        value="Search" 
+                        look="success"  
+                        action="#{twitterSearch.search}" 
+                        update="@form:results" />
                 </f:facet>
             </b:inputText>
         </h:form>
         <b:row id="results">
             <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
                 <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                    <ui:repeat var="tweet" value="#{twitterSearch.result}">
-                        <b:well>
-                            <h3>Sentiment: ${tweet.sentiment.value}</h3>
-                            <h:outputText value="${tweet.text}"/>
-                        </b:well>
-                    </ui:repeat>
+                    <h:form>
+                        <p:poll interval="2" update="sentimentChart"  />
+                        <p:chart id="sentimentChart" type="pie" model="#{liveSentimentChartBean.getLiveChart(twitterSearch.text)}" style="width:400px;height:300px"/>
+                    </h:form>
                 </b:panel>
             </c:if>
         </b:row>

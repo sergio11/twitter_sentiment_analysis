@@ -8,6 +8,8 @@ package facade;
 import dao.TopicDAOBeanLocal;
 import dao.TweetDAOBeanLocal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -17,7 +19,6 @@ import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import models.Topic;
-import models.Tweet;
 import models.TweetsBySentiment;
 
 /**
@@ -40,7 +41,8 @@ public class FacadeBean implements FacadeBeanLocal {
 
     @Override
     public void analyzeTopic(String text) {
-        Topic topic = new Topic(text);
+        Logger.getLogger(FacadeBean.class.getName()).log(Level.INFO, "Topic to analyze: " + text);
+        Topic topic = new Topic(text.toLowerCase());
         //save topic
         topicDAOBean.persist(topic);
         // enqueue message

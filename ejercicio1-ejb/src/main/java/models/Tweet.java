@@ -40,7 +40,7 @@ import javax.persistence.Temporal;
 )
 @NamedNativeQuery(
     name = "TweetsBySentiment",
-    query = "SELECT sentiment, COUNT(*) AS tweets from tweets A JOIN topics B ON(A.topic_id=B.id) WHERE UPPER(B.name) = 'KEANE' GROUP BY A.SENTIMENT",
+    query = "SELECT sentiment, COUNT(*) AS tweets from tweets A JOIN topics B ON(A.topic_id=B.id) WHERE LOWER(B.name) = ?1 GROUP BY A.SENTIMENT",
     resultSetMapping = "TweetsBySentimentResult"
 )
 public class Tweet implements Serializable{

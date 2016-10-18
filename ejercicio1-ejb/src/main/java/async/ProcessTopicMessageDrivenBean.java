@@ -57,8 +57,14 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 Sentiment sentiment = sentimentAnalyzerBean.findSentiment(tweet.getText());
                 tweet.setSentiment(sentiment);
                 tweet.setTopic(topic);
+                // persist tweet
+                tweetDAOBean.persist(tweet);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            tweetDAOBean.persist(tweets);
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
         }   

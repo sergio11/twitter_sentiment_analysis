@@ -59,6 +59,4 @@ public class TwitterSearchBean implements TwitterSearchBeanLocal {
             throw new RuntimeException(e);
         }
     }
-
-    
 }

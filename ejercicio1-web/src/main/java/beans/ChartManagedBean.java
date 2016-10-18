@@ -114,6 +114,7 @@ public class ChartManagedBean {
             String topic = ite.next();
             if(!donutCharts.containsKey(topic) || !pieCharts.containsKey(topic)){
                 List<TweetsBySentiment> result = facadeBean.groupedBySentiment(topic);
+                Logger.getLogger(ChartManagedBean.class.getName()).log(Level.INFO, "Result Count: " + result.size());
                 if(!donutCharts.containsKey(topic))
                     donutCharts.put(topic, createDonutChart(result));
                 if(!pieCharts.containsKey(topic))

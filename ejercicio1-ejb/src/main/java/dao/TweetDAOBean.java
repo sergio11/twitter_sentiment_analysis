@@ -49,8 +49,7 @@ public class TweetDAOBean implements TweetDAOBeanLocal {
     @Override
     public List<TweetsBySentiment> groupedBySentiment(final String topic) {
         try{
-            Logger.getLogger(TweetDAOBean.class.getName()).log(Level.INFO, "Obteniendo tweets para:" + topic);
-            return em.createNamedQuery("TweetsBySentiment").getResultList();
+            return em.createNamedQuery("TweetsBySentiment").setParameter(1, topic).getResultList();
         }catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);

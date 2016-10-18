@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import models.Tweet;
@@ -28,9 +29,18 @@ public class TwitterSearchManagedBean implements Serializable {
     
     @EJB
     private FacadeBeanLocal facadeBean;
-    
+    @ManagedProperty("#{liveSentimentChartBean}")
+    private LiveSentimentChartManagedBean liveSentimentChartBean;
     private String text;
     private List<Tweet> result;
+
+    public LiveSentimentChartManagedBean getLiveSentimentChartBean() {
+        return liveSentimentChartBean;
+    }
+
+    public void setLiveSentimentChartBean(LiveSentimentChartManagedBean liveSentimentChartBean) {
+        this.liveSentimentChartBean = liveSentimentChartBean;
+    }
 
     public String getText() {
         return text;
@@ -53,6 +63,8 @@ public class TwitterSearchManagedBean implements Serializable {
         try {
             // analyze topic
             facadeBean.analyzeTopic(text);
+            // create live chart for topic
+            liveSentimentChartBean.createChart(text);
             // add confirmation message
             FacesMessage message = new FacesMessage();
             message.setSeverity(FacesMessage.SEVERITY_INFO);
