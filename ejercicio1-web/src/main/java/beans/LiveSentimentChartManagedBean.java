@@ -42,9 +42,15 @@ public class LiveSentimentChartManagedBean implements Serializable {
     public void setI18n(ResourceBundle i18n) {
         this.i18n = i18n;
     }
+
+    public Map<String, PieChartModel> getLiveCharts() {
+        return liveCharts;
+    }
+  
    
-    public PieChartModel getLiveChart(final String topic) {
+    public void updateChart(final String topic){
         PieChartModel chart =  liveCharts != null ? liveCharts.get(topic) : null;
+        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
         if(chart != null){
             List<TweetsBySentiment> tbsList = facadeBean.groupedBySentiment(topic);
             Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "Result count: " + tbsList.size());
@@ -55,9 +61,9 @@ public class LiveSentimentChartManagedBean implements Serializable {
                 chart.set(label, tbs.getTweets());
             }
         }
-        return chart;
-    }
+        liveCharts.put(topic, chart);
     
+    }
     public void createChart(String topic){
         PieChartModel pieChart = new PieChartModel();
         pieChart.setTitle("Custom Pie");

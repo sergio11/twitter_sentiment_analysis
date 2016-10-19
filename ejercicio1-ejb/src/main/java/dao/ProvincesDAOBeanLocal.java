@@ -3,28 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package facade;
+package dao;
 
 import java.util.List;
 import javax.ejb.Local;
-import models.Country;
 import models.Province;
-import models.Topic;
-import models.TweetsBySentiment;
 
 /**
  *
  * @author sergio
  */
 @Local
-public interface FacadeBeanLocal {
+public interface ProvincesDAOBeanLocal {
 
-    void analyzeTopic(String topic);
-    List<Topic> getTopics();
-    List<TweetsBySentiment> groupedBySentiment(final String topic);
-    List<Country> getCountries();
-
-    List<Province> getProvinces();
+    List<Province> all();
 
     List<Province> getProvincesByCountry(final Long country);
     

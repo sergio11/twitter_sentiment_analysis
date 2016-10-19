@@ -5,6 +5,8 @@
  */
 package facade;
 
+import dao.CountryDAOBeanLocal;
+import dao.ProvincesDAOBeanLocal;
 import dao.TopicDAOBeanLocal;
 import dao.TweetDAOBeanLocal;
 import java.util.List;
@@ -18,6 +20,8 @@ import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import models.Country;
+import models.Province;
 import models.Topic;
 import models.TweetsBySentiment;
 
@@ -28,7 +32,7 @@ import models.TweetsBySentiment;
 @Stateless
 public class FacadeBean implements FacadeBeanLocal {
     
-    
+   
     @Resource(mappedName = "jms/QueueReceptor")
     private Queue queueReceptor;
     @Inject
@@ -38,6 +42,10 @@ public class FacadeBean implements FacadeBeanLocal {
     private TopicDAOBeanLocal topicDAOBean;
     @EJB
     private TweetDAOBeanLocal tweetDAOBean;
+    @EJB
+    private ProvincesDAOBeanLocal provincesDAOBean;
+    @EJB
+    private CountryDAOBeanLocal countryDAOBean;
 
     @Override
     public void analyzeTopic(String text) {
@@ -59,6 +67,21 @@ public class FacadeBean implements FacadeBeanLocal {
     @Override
     public List<TweetsBySentiment> groupedBySentiment(final String topic) {
         return tweetDAOBean.groupedBySentiment(topic);
+    }
+
+    @Override
+    public List<Country> getCountries() {
+        return countryDAOBean.all();
+    }
+
+    @Override
+    public List<Province> getProvinces() {
+        return provincesDAOBean.all();
+    }
+
+    @Override
+    public List<Province> getProvincesByCountry(final Long country) {
+        return provincesDAOBean.getProvincesByCountry(country);
     }
     
     

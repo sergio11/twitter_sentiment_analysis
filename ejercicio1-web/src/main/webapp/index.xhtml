@@ -2,36 +2,14 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:b="http://bootsfaces.net/ui"
-                template="./WEB-INF/templates/app_template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                xmlns:p="http://primefaces.org/ui">
+                template="./WEB-INF/templates/app_template.xhtml">
 
     <ui:define name="content">
-        <h:form>
-            <b:inputText placeholder="Type something here..." value="#{twitterSearch.text}">
-                <f:facet name="prepend">
-                    <b:iconAwesome name="search" />
-                </f:facet>
-                <f:facet name="append">
-                    <b:commandButton 
-                        value="Search" 
-                        look="success"  
-                        action="#{twitterSearch.search}" 
-                        update="@form:results" />
-                </f:facet>
-            </b:inputText>
-        </h:form>
-        <b:row id="results">
-            <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
-                <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                    <h:form>
-                        <p:poll interval="2" update="sentimentChart"  />
-                        <p:chart id="sentimentChart" type="pie" model="#{liveSentimentChartBean.getLiveChart(twitterSearch.text)}" style="width:400px;height:300px"/>
-                    </h:form>
-                </b:panel>
-            </c:if>
-        </b:row>
+        <b:jumbotron>
+            <h1>Ejercicio 1 | Curso JSF</h1>
+            <p>Crear una aplicación que utilice todas las etiquetas de la librería html.</p>
+            <p><a class="btn btn-primary btn-lg">Login</a></p>
+        </b:jumbotron>
     </ui:define>
+
 </ui:composition>

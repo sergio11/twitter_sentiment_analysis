@@ -5,30 +5,27 @@
  */
 package dao;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import models.Tweet;
-import models.TweetsBySentiment;
+import models.Province;
 
 /**
  *
  * @author sergio
  */
 @Stateless
-public class TweetDAOBean implements TweetDAOBeanLocal {
+public class ProvincesDAOBean implements ProvincesDAOBeanLocal {
     @PersistenceContext(unitName = "sentiment_PU")
     private EntityManager em;
     
     @Override
-    public void persist(final Tweet tweet) {
+    public List<Province> all() {
         try {
-            em.persist(tweet);
-            em.flush();
+            return em.createNamedQuery("Province.getAll").getResultList();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);
@@ -36,27 +33,14 @@ public class TweetDAOBean implements TweetDAOBeanLocal {
     }
 
     @Override
-    public void persist(List<Tweet> tweets) {
+    public List<Province> getProvincesByCountry(final Long country) {
         try {
-            Iterator<Tweet> ite = tweets.iterator();
-            while(ite.hasNext())
-                persist(ite.next());
+            return em.createNamedQuery("Province.getByCountry").setParameter("country", country).getResultList();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public List<TweetsBySentiment> groupedBySentiment(final String topic) {
-        try{
-            return em.createNamedQuery("TweetsBySentiment").setParameter(1, topic).getResultList();
-        }catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
-            throw new RuntimeException(e);
-        }
-    }
-    
     
     
 }

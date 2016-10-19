@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="./../WEB-INF/templates/app_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:u="http://java.sun.com/jsf/composite/doublePassword">
+    <ui:define name="content">
+        <h:form>
+            <b:messages />
+            <b:inputText 
+                type="text" 
+                value="#{userBean.user.name}" 
+                label="#{i18n['form.name.label']}" 
+                required="true"
+                tooltip="#{i18n['form.name.tooltip']}"
+                tooltip-position="bottom">
+                <f:validateLength minimum="3" maximum="15" />
+            </b:inputText>
+            <b:inputText 
+                type="text" 
+                value="#{userBean.user.lastname}" 
+                label="#{i18n['form.lastname.label']}" 
+                required="true"
+                tooltip="#{i18n['form.lastname.tooltip']}"
+                tooltip-position="bottom">
+                <f:validateLength minimum="3" maximum="15" />
+            </b:inputText>
+            <b:selectOneMenu 
+                id="country" 
+                value="#{locationBean.country}" 
+                label="#{i18n['form.country.label']}"  
+                onchange="ajax:locationBean.changeCountry()" 
+                update="@next" 
+                process="country" 
+                required="true"
+                tooltip="#{i18n['form.country.tooltip']}"
+                tooltip-position="bottom">
+                <f:selectItems value="#{locationBean.countries}" var="c" itemValue="#{c.id}" itemLabel="#{c.name}"/>
+            </b:selectOneMenu>
+            <b:selectOneMenu
+                id="provinces"
+                value="#{userBean.user.province}" 
+                label="#{i18n['form.province.label']}" 
+                disabled="${empty locationBean.provincesSelected}"
+                required="true"
+                tooltip="#{i18n['form.province.tooltip']}"
+                tooltip-position="bottom">
+                <f:selectItems value="#{locationBean.provincesSelected}" var="p" itemValue="#{p}" itemLabel="#{p.name}"/>
+            </b:selectOneMenu>
+            <u:doublePassword value="#{userBean.user.password}">
+                <f:validateLength minimum="4" for="password"/>
+            </u:doublePassword>
+            <b:commandButton action="#{userBean.save}" value="#{i18n['form.submit.label']}" look="success" iconAwesome="send" ajax="true" update="@form"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
