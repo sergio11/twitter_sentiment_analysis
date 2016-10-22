@@ -22,7 +22,7 @@ import javax.persistence.OneToOne;
 public class Role implements Serializable {
 
     public static enum ROLE {
-        ADMINISTRATOR, USER, GUEST
+        ADMINISTRATOR, USER
     }
     
     private static final long serialVersionUID = 1L;

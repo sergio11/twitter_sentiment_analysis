@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:b="http://bootsfaces.net/ui"
-                template="./../WEB-INF/templates/app_template.xhtml"
+                template="/WEB-INF/templates/app_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:u="http://java.sun.com/jsf/composite/doublePassword">
@@ -49,6 +49,9 @@
                 tooltip-position="bottom">
                 <f:selectItems value="#{locationBean.provincesSelected}" var="p" itemValue="#{p}" itemLabel="#{p.name}"/>
             </b:selectOneMenu>
+            <h:selectOneRadio value="#{userBean.user.role}" >
+                <f:selectItems value="#{userBean.getRoleValues()}"/>
+            </h:selectOneRadio>
             <u:doublePassword value="#{userBean.user.password}">
                 <f:validateLength minimum="4" for="password"/>
             </u:doublePassword>

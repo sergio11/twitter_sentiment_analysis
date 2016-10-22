@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sun-ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD GlassFish Application Server 3.0 EJB 3.1//EN" "http://www.sun.com/software/appserver/dtds/sun-ejb-jar_3_1-0.dtd">
+<sun-ejb-jar>
+    <enterprise-beans>
+        <session>
+            <ejb-name>TwitterSearchBean</ejb-name>
+            <env-entry>
+                <env-entry-name>TWITTER_OAUTH_CONSUMER_KEY</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>please enter key here</env-entry-value>
+            </env-entry>
+            <env-entry>
+                <env-entry-name>TWITTER_OAUTH_CONSUMER_SECRET</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>please enter key here</env-entry-value>
+            </env-entry>
+            <env-entry>
+                <env-entry-name>TWITTER_OAUTH_ACCESS_TOKEN</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>please enter key here</env-entry-value>
+            </env-entry>
+            <env-entry>
+                <env-entry-name>TWITTER_OAUTH_ACCESS_TOKEN_SECRET</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>please enter key here</env-entry-value>
+            </env-entry>
+        </session>
+    </enterprise-beans>
+</sun-ejb-jar>

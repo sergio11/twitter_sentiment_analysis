@@ -9,6 +9,7 @@ import dao.CountryDAOBeanLocal;
 import dao.ProvincesDAOBeanLocal;
 import dao.TopicDAOBeanLocal;
 import dao.TweetDAOBeanLocal;
+import dao.UserDAOBeanLocal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +25,7 @@ import models.Country;
 import models.Province;
 import models.Topic;
 import models.TweetsBySentiment;
+import models.User;
 
 /**
  *
@@ -32,7 +34,6 @@ import models.TweetsBySentiment;
 @Stateless
 public class FacadeBean implements FacadeBeanLocal {
     
-   
     @Resource(mappedName = "jms/QueueReceptor")
     private Queue queueReceptor;
     @Inject
@@ -46,6 +47,8 @@ public class FacadeBean implements FacadeBeanLocal {
     private ProvincesDAOBeanLocal provincesDAOBean;
     @EJB
     private CountryDAOBeanLocal countryDAOBean;
+    @EJB
+    private UserDAOBeanLocal userDAOBean;
 
     @Override
     public void analyzeTopic(String text) {
@@ -83,6 +86,10 @@ public class FacadeBean implements FacadeBeanLocal {
     public List<Province> getProvincesByCountry(final Long country) {
         return provincesDAOBean.getProvincesByCountry(country);
     }
-    
+
+    @Override
+    public void persistUser(final User user) {
+        userDAOBean.persist(user);
+    }
     
 }

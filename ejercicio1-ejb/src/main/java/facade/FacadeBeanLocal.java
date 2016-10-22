@@ -11,6 +11,7 @@ import models.Country;
 import models.Province;
 import models.Topic;
 import models.TweetsBySentiment;
+import models.User;
 
 /**
  *
@@ -27,5 +28,7 @@ public interface FacadeBeanLocal {
     List<Province> getProvinces();
 
     List<Province> getProvincesByCountry(final Long country);
+
+    void persistUser(final User user);
     
 }

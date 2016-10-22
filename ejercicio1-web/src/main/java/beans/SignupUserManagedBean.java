@@ -5,13 +5,17 @@
  */
 package beans;
 
+import facade.FacadeBeanLocal;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import models.Role;
 import models.User;
 
 
@@ -22,7 +26,8 @@ import models.User;
 @ManagedBean(name = "userBean")
 @RequestScoped
 public class SignupUserManagedBean {
-    
+    @EJB
+    private FacadeBeanLocal facadeBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private User user;
@@ -48,9 +53,18 @@ public class SignupUserManagedBean {
         this.i18n = i18n;
     }
     
+    public SelectItem[] getRoleValues() {
+        SelectItem[] items = new SelectItem[Role.ROLE.values().length];
+        int i = 0;
+        for(Role.ROLE r: Role.ROLE.values()) {
+          items[i++] = new SelectItem(r, r.name());
+        }
+        return items;
+    }
+    
     public void save(){
-        String message = i18n.getString("user.saved");
-        FacesMessage facesMessage = new FacesMessage(message);
+        facadeBean.persistUser(user);
+        FacesMessage facesMessage = new FacesMessage(i18n.getString("user.saved"));
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         user = new User();
     }

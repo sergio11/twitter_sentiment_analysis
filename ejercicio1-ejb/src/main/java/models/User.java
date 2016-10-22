@@ -23,10 +23,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.ManyToOne;
 import models.Role.ROLE;
 
-/**
- *
- * @author Marek Piechut
- */
 @Entity(name = "USERS")
 public class User implements Serializable {
 

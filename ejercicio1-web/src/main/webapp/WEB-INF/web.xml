@@ -35,7 +35,7 @@
         </web-resource-collection>
         <auth-constraint>
             <description/>
-            <role-name>ADMIN</role-name>
+            <role-name>ADMINISTRATOR</role-name>
         </auth-constraint>
     </security-constraint>
     <login-config>
@@ -48,7 +48,7 @@
     </login-config>
     <security-role>
         <description>Administradores</description>
-        <role-name>ADMIN</role-name>
+        <role-name>ADMINISTRATOR</role-name>
     </security-role>
     <security-role>
         <description>Usuario normal</description>
