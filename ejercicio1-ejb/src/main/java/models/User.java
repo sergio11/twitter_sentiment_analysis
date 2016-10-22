@@ -19,9 +19,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.ManyToOne;
-import models.Role.ROLE;
 
 @Entity(name = "USERS")
 public class User implements Serializable {
@@ -30,12 +28,10 @@ public class User implements Serializable {
     @Id
     @Column(name = "USER_NAME")
     private String userName;
-    @Column(name = "PASSWD", length = 32, 
-            columnDefinition = "VARCHAR(32)")
+    @Column(name = "PASSWD", length = 32,columnDefinition = "VARCHAR(32)")
     private char[] password;
-    @OneToOne(fetch = FetchType.EAGER, 
-      cascade = CascadeType.ALL, mappedBy = "user")
-    private Role role;
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Group group;
     private String name;
     private String lastname;
     @ManyToOne
@@ -44,10 +40,10 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String userName, char[] password, ROLE role) {
+    public User(String userName, char[] password, Group group) {
         this.userName = userName;
         this.password = hashPassword(password);
-        this.role = new Role(role, this);
+        this.group = group;
     }
 
     public char[] getPassword() {
@@ -66,13 +62,13 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public Role getRole() {
-        return role;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-        role.setUser(this);
+    public void setGroup(Group group) {
+        this.group = group;
+        group.addUser(this);
     }
 
     public String getName() {
@@ -122,13 +118,7 @@ public class User implements Serializable {
         return hash;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "userName=" + userName + ", password=" + password + ", role=" + role + '}';
-    }
-
-    
-
+   
     private char[] hashPassword(char[] password) {
         char[] encoded = null;
         try {

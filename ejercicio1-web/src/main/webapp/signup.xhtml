@@ -49,8 +49,8 @@
                 tooltip-position="bottom">
                 <f:selectItems value="#{locationBean.provincesSelected}" var="p" itemValue="#{p}" itemLabel="#{p.name}"/>
             </b:selectOneMenu>
-            <h:selectOneRadio value="#{userBean.user.role}" >
-                <f:selectItems value="#{userBean.getRoleValues()}"/>
+            <h:selectOneRadio value="#{userBean.user.group}" >
+                <f:selectItems value="#{userBean.groups}"/>
             </h:selectOneRadio>
             <u:doublePassword value="#{userBean.user.password}">
                 <f:validateLength minimum="4" for="password"/>

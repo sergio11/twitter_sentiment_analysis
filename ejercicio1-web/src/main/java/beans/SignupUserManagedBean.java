@@ -6,6 +6,7 @@
 package beans;
 
 import facade.FacadeBeanLocal;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -14,8 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import models.Role;
+import models.Group;
 import models.User;
 
 
@@ -31,6 +31,7 @@ public class SignupUserManagedBean {
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private User user;
+    private List<Group> groups;
     
     @PostConstruct
     public void init(){
@@ -52,14 +53,21 @@ public class SignupUserManagedBean {
     public void setI18n(ResourceBundle i18n) {
         this.i18n = i18n;
     }
-    
-    public SelectItem[] getRoleValues() {
-        SelectItem[] items = new SelectItem[Role.ROLE.values().length];
-        int i = 0;
-        for(Role.ROLE r: Role.ROLE.values()) {
-          items[i++] = new SelectItem(r, r.name());
-        }
-        return items;
+
+    public FacadeBeanLocal getFacadeBean() {
+        return facadeBean;
+    }
+
+    public void setFacadeBean(FacadeBeanLocal facadeBean) {
+        this.facadeBean = facadeBean;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
     
     public void save(){

@@ -7,14 +7,14 @@
     <class>models.Tweet</class>
     <class>models.Country</class>
     <class>models.Province</class>
-    <class>models.Role</class>
     <class>models.User</class>
+    <class>models.Group</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <property name="eclipse.weaving" value="false" />
+      <property name="eclipse.weaving" value="false"/>
       <property name="eclipselink.logging.level.sql" value="FINE"/>
       <property name="eclipselink.logging.parameters" value="true"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
 </persistence>
