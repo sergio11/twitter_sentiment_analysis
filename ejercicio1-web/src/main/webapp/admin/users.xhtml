@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="./../WEB-INF/templates/app_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="content">
+        
+        <h:form id="users">
+            <b:messages />
+            <b:dataTable
+                id="datatable"
+                value="#{usersBean.users}"
+                fixedHeader="true"
+                scroll-size="300px"
+                scroll-x="false"
+                var="user" 
+                ajax="true" 
+                responsive="true">
+                <b:dataTableColumn label="#{i18n['datatable.users.name.label']}">
+                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.name}" />
+                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.name}" />                 
+                </b:dataTableColumn>
+                <b:dataTableColumn label="#{i18n['datatable.users.lastname.label']}">
+                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.lastname}" />
+                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.lastname}" />
+                </b:dataTableColumn>
+                <b:dataTableColumn label="#{i18n['datatable.users.birthdate.label']}">
+                    <b:datepicker 
+                        rendered="#{user.id eq usersBean.contactToUpdate.id}" 
+                        id="birthday" 
+                        mode="plain" 
+                        value="#{usersBean.userToUpdate.birthday}" 
+                        tooltip="#{i18n['datatable.users.birthdate.tooltip']}" 
+                        tooltip-position="bottom" 
+                        col-md="10" >
+                        <f:convertDateTime pattern="dd/MM/yy" />
+                    </b:datepicker>
+                    <h:outputFormat>
+                        <f:param value="#{user.birthday}" />
+                    </h:outputFormat>
+                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.birthday}" >
+                        <f:convertDateTime type="date" pattern="dd/MM/yy"/>
+                    </h:outputText>
+                </b:dataTableColumn>
+                <b:dataTableColumn label="#{i18n['datatable.users.email.label']}" >
+                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.email}" type="email" />
+                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.email}" />
+                </b:dataTableColumn>
+                <b:dataTableColumn label="#{i18n['datatable.users.mobile.label']}">
+                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.mobile}" type="number" />
+                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.mobile}" />
+                </b:dataTableColumn>
+                <b:dataTableColumn label="#{i18n['datatable.users.actions.label']}" orderable="false">
+                    <b:buttonGroup>
+                        <b:commandButton value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#modal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.userToDelete = user}" update=":modal:content"/>
+                        <b:commandButton rendered="#{user.id ne usersBean.userToUpdate.id}" value="edit" look="warning" size="xs" icon-awesome="pencil"  actionListener="#{usersBean.userToUpdate = user}" ajax="true" update="@form"/>
+                        <b:commandButton rendered="#{user.id eq usersBean.userToUpdate.id}" value="save" look="success" size="xs" icon-awesome="floppy-o"  action="#{usersBean.update}" ajax="true" update="@form"/>
+                    </b:buttonGroup>
+                </b:dataTableColumn>
+            </b:dataTable>
+            <b:row>
+                <b:buttonGroup>
+                    <b:button value="#{i18n['datatable.users.actions.add']}" look="info" p:data-target="#amodal" p:data-toggle="modal"  size="md" icon-awesome="user-plus"/>
+                </b:buttonGroup>
+            </b:row>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

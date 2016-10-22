@@ -30,5 +30,9 @@ public interface FacadeBeanLocal {
     List<Province> getProvincesByCountry(final Long country);
 
     void persistUser(final User user);
+
+    List<User> getAllUsers();
+
+    void removeUser(final User user);
     
 }

@@ -1,0 +1,20 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:b="http://bootsfaces.net/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <b:modal id="modal" title="#{i18n['form.remove.title']}">
+        <h:outputFormat value="#{msgs['pages.user.hello']}">
+            <f:param value="#{usersBean.userToDelete.getFullname()}"/>
+        </h:outputFormat>
+        <f:facet name="footer">
+            <h:form>
+                <b:button value="#{i18n['form.remove.cancel']}" dismiss="modal"/>
+                <b:commandButton look="danger" value="#{i18n['form.remove.submit']}" action="${usersBean.delete()}"  ajax="true" update=":users"/>
+            </h:form>
+        </f:facet>
+    </b:modal>
+</ui:composition>
+

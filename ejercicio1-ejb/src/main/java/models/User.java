@@ -12,6 +12,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
@@ -20,8 +21,14 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
 
 @Entity(name = "USERS")
+@NamedQueries({
+    @NamedQuery(name = "User.all", query = "SELECT u FROM USERS u")
+})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,25 +41,12 @@ public class User implements Serializable {
     private Group group;
     private String name;
     private String lastname;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date birthday;
+    private String email;
+    private Integer mobile;
     @ManyToOne
     private Province province;
-
-    public User() {
-    }
-
-    public User(String userName, char[] password, Group group) {
-        this.userName = userName;
-        this.password = hashPassword(password);
-        this.group = group;
-    }
-
-    public char[] getPassword() {
-        return password;
-    }
-
-    public void setPassword(char[] password) {
-        this.password = hashPassword(password);
-    }
 
     public String getUserName() {
         return userName;
@@ -60,6 +54,14 @@ public class User implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public char[] getPassword() {
+        return password;
+    }
+
+    public void setPassword(char[] password) {
+        this.password = password;
     }
 
     public Group getGroup() {
@@ -87,6 +89,30 @@ public class User implements Serializable {
         this.lastname = lastname;
     }
 
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(Integer mobile) {
+        this.mobile = mobile;
+    }
+
     public Province getProvince() {
         return province;
     }
@@ -95,6 +121,10 @@ public class User implements Serializable {
         this.province = province;
     }
     
+    public String getFullname(){
+        return name + " " + lastname; 
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

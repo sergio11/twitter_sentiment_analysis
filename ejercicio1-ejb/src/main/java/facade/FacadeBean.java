@@ -91,5 +91,14 @@ public class FacadeBean implements FacadeBeanLocal {
     public void persistUser(final User user) {
         userDAOBean.persist(user);
     }
-    
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDAOBean.all();
+    }
+
+    @Override
+    public void removeUser(final User user) {
+        userDAOBean.remove(user);
+    }
 }

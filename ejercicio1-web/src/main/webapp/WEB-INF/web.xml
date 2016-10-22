@@ -27,7 +27,7 @@
     </welcome-file-list>
     <!-- Protected Areas -->
     <security-constraint>
-        <display-name>Security Constraints</display-name>
+        <display-name>Admin operations</display-name>
         <web-resource-collection>
             <web-resource-name>Only Admin</web-resource-name>
             <description>only admin resources</description>
@@ -36,6 +36,18 @@
         <auth-constraint>
             <description/>
             <role-name>ADMINISTRATOR</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Users operations</display-name>
+        <web-resource-collection>
+            <web-resource-name>only users</web-resource-name>
+            <description>users operations</description>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>USER</role-name>
         </auth-constraint>
     </security-constraint>
     <login-config>
@@ -54,4 +66,10 @@
         <description>Usuario normal</description>
         <role-name>USER</role-name>
     </security-role>
+    <ejb-local-ref>
+        <ejb-ref-name>FacadeBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>facade.FacadeBeanLocal</local>
+        <ejb-link>ejercicio1-ejb-1.0-SNAPSHOT#FacadeBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

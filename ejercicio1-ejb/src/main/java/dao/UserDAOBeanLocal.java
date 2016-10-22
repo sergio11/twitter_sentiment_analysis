@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.List;
 import javax.ejb.Local;
 import models.User;
 
@@ -16,5 +17,7 @@ import models.User;
 public interface UserDAOBeanLocal {
 
     void persist(final User user);
+    List<User> all();
+    void remove(final User user);
     
 }

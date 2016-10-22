@@ -1,0 +1,127 @@
+<ui:composition
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:u="http://java.sun.com/jsf/composite/doublePassword">
+    
+    <b:modal id="amodal" title="#{i18n['form.create.title']}"
+             closable="false" close-on-escape="false" backdrop="false">
+        
+        <h:form>
+            <b:messages />
+            <b:row>
+                <b:inputText 
+                    type="text" 
+                    value="#{userBean.userToCreate.name}" 
+                    label="#{i18n['form.create.name.label']}" 
+                    required="true"
+                    tooltip="#{i18n['form.create.name.tooltip']}"
+                    tooltip-position="bottom">
+                    <f:validateLength minimum="3" maximum="15" />
+                    <f:facet name="prepend">
+                        <b:iconAwesome name="user" />
+                    </f:facet>
+                </b:inputText>
+            </b:row>
+            <b:row>
+                <b:inputText 
+                    type="text" 
+                    value="#{userBean.userToCreate.lastname}" 
+                    label="#{i18n['form.create.lastname.label']}" 
+                    required="true"
+                    tooltip="#{i18n['form.create.lastname.tooltip']}"
+                    tooltip-position="bottom">
+                    <f:validateLength minimum="3" maximum="15" />
+                    <f:facet name="prepend">
+                        <b:iconAwesome name="user" />
+                    </f:facet>
+                </b:inputText>
+            </b:row>
+            <b:row>
+                <b:inputText 
+                    id="email"
+                    type="email"
+                    value="#{userBean.userToCreate.email}"
+                    label="#{i18n['form.create.email.label']}"
+                    col-md="12"
+                    tooltip="#{i18n['form.create.email.tooltip']}" 
+                    tooltip-position="bottom">
+                    <f:validateRequired />
+                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    <f:facet name="prepend">
+                        <b:iconAwesome name="envelope" />
+                    </f:facet>
+                </b:inputText>
+            </b:row>
+            <b:row>
+                <b:inputText
+                    id="mobile"
+                    type="number"
+                    value="#{userBean.userToCreate.mobile}"
+                    label="#{i18n['form.create.mobile.label']}"
+                    col-md="12"
+                    tooltip="#{i18n['form.create.mobile.tooltip']}" 
+                    tooltip-position="bottom">
+                    <f:validateLength minimum="9" maximum="9" />
+                    <f:facet name="prepend">
+                        <b:iconAwesome name="phone" />
+                    </f:facet>
+                </b:inputText>
+            </b:row>
+            <b:row>
+                <b:selectOneMenu 
+                    id="country" 
+                    value="#{locationBean.country}" 
+                    label="#{i18n['form.create.country.label']}"  
+                    onchange="ajax:locationBean.changeCountry()" 
+                    update="@next" 
+                    process="country" 
+                    required="true"
+                    tooltip="#{i18n['form.create.country.tooltip']}"
+                    tooltip-position="bottom">
+                    <f:selectItems value="#{locationBean.countries}" var="c" itemValue="#{c.id}" itemLabel="#{c.name}"/>
+                </b:selectOneMenu>
+            </b:row>
+            <b:row>
+                <b:selectOneMenu
+                    id="provinces"
+                    value="#{userBean.userToCreate.province}" 
+                    label="#{i18n['form.create.province.label']}" 
+                    disabled="${empty locationBean.provincesSelected}"
+                    required="true"
+                    tooltip="#{i18n['form.create.province.tooltip']}"
+                    tooltip-position="bottom">
+                    <f:selectItems value="#{locationBean.provincesSelected}" var="p" itemValue="#{p}" itemLabel="#{p.name}"/>
+                </b:selectOneMenu>
+            </b:row>
+            <h:selectOneRadio value="#{userBean.userToCreate.group}">
+                <f:selectItems value="#{userBean.groups}"/>
+            </h:selectOneRadio>
+            <u:doublePassword value="#{userBean.userToCreate.password}">
+                <f:validateLength minimum="4" for="password"/>
+            </u:doublePassword>
+             <b:row>
+                <b:datepicker 
+                    id="birthday"
+                    mode="popup-icon"
+                    col-md="12"
+                    tooltip="#{i18n['form.create.birthday.tooltip']}" 
+                    tooltip-position="bottom"
+                    value="#{userBean.userToCreate.birthday}"
+                    required="true">
+                    <f:convertDateTime pattern="dd/MM/yy" />
+                </b:datepicker>
+            </b:row>
+            <b:fetchBeanInfos />
+            <b:row>
+                <b:buttonGroup pull="right">
+                    <b:commandButton value="#{i18n['form.create.submit.label']}" look="success" action="#{userBean.save}" ajax="true" update="@form, @form:users" />
+                    <b:button value="#{i18n['form.create.cancel']}" dismiss="modal"/>
+                </b:buttonGroup>
+            </b:row>
+        </h:form>
+    </b:modal>
+</ui:composition>
+
