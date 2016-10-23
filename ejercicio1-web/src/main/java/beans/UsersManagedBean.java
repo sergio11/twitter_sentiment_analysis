@@ -129,6 +129,11 @@ public class UsersManagedBean implements Serializable {
         userToDelete = new User();
     }
     
+    public void confirmDelete(User user){
+        userToDelete = user;
+    }
     
-
+    public void editUser(User user){
+        userToUpdate = user;
+    }
 }

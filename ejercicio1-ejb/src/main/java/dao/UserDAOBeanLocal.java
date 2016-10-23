@@ -19,5 +19,6 @@ public interface UserDAOBeanLocal {
     void persist(final User user);
     List<User> all();
     void remove(final User user);
+    User find(final String username);
     
 }

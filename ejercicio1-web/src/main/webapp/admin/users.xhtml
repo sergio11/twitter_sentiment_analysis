@@ -56,8 +56,8 @@
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.actions.label']}" orderable="false">
                     <b:buttonGroup>
-                        <b:commandButton value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#modal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.userToDelete = user}" update=":modal:content"/>
-                        <b:commandButton rendered="#{user.id ne usersBean.userToUpdate.id}" value="edit" look="warning" size="xs" icon-awesome="pencil"  actionListener="#{usersBean.userToUpdate = user}" ajax="true" update="@form"/>
+                        <b:commandButton value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#modal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.confirmDelete(user)}" update=":modal:content"/>
+                        <b:commandButton rendered="#{user.id ne usersBean.userToUpdate.id}" value="edit" look="warning" size="xs" icon-awesome="pencil"  actionListener="#{usersBean.editUser(user)}" ajax="true" update="@form"/>
                         <b:commandButton rendered="#{user.id eq usersBean.userToUpdate.id}" value="save" look="success" size="xs" icon-awesome="floppy-o"  action="#{usersBean.update}" ajax="true" update="@form"/>
                     </b:buttonGroup>
                 </b:dataTableColumn>

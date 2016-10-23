@@ -34,5 +34,7 @@ public interface FacadeBeanLocal {
     List<User> getAllUsers();
 
     void removeUser(final User user);
+
+    User findUser(final String username);
     
 }

@@ -10,7 +10,7 @@
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty request.remoteUser}">
-            <p>Welcome, #{request.remoteUser}!</p>
+            <p>Welcome, #{user.name}!</p>
         </ui:fragment>
         <h:form>
             <b:inputText placeholder="Type something here..." value="#{twitterSearch.text}">

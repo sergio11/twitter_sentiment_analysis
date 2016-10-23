@@ -101,4 +101,11 @@ public class FacadeBean implements FacadeBeanLocal {
     public void removeUser(final User user) {
         userDAOBean.remove(user);
     }
+
+    @Override
+    public User findUser(final String username) {
+        return userDAOBean.find(username);
+    }
+    
+    
 }

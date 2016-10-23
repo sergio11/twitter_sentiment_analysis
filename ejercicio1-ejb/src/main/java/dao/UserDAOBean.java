@@ -21,7 +21,7 @@ import models.User;
 public class UserDAOBean implements UserDAOBeanLocal {
     @PersistenceContext(unitName = "sentiment_PU")
     private EntityManager em;
-    
+   
     @Override
     public void persist(final User user) {
         try{
@@ -46,6 +46,16 @@ public class UserDAOBean implements UserDAOBeanLocal {
     public void remove(final User user) {
         try {
             em.remove(em.merge(user));
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public User find(final String username) {
+        try {
+            return em.createNamedQuery("User.find", User.class).setParameter("username", username).getSingleResult();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);

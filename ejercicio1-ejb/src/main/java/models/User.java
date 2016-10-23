@@ -27,7 +27,8 @@ import javax.persistence.Temporal;
 
 @Entity(name = "USERS")
 @NamedQueries({
-    @NamedQuery(name = "User.all", query = "SELECT u FROM USERS u")
+    @NamedQuery(name = "User.all", query = "SELECT u FROM USERS u"),
+    @NamedQuery(name = "User.find", query = "SELECT u FROM USERS u WHERE u.userName = :username")
 })
 public class User implements Serializable {
 
