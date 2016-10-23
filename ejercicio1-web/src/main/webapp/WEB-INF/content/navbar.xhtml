@@ -2,12 +2,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:fragment xmlns="http://www.w3.org/1999/xhtml"
              xmlns:ui="http://java.sun.com/jsf/facelets"
-             xmlns:b="http://bootsfaces.net/ui">
+             xmlns:b="http://bootsfaces.net/ui"
+             xmlns:h="http://xmlns.jcp.org/jsf/html">
     <b:navBar brand="Project name" brandHref="#">
         <b:navbarLinks>
-            <b:navLink value="#{i18n['page.navbar.analysis']}" href="admin/analysis.xhtml"></b:navLink>
-            <b:navLink value="#{i18n['page.navbar.results']}" href="results.xhtml"></b:navLink>
-            <b:navLink value="#{i18n['page.navbar.users']}" href="users.xhtml"></b:navLink>
+            <b:navLink iconAwesome="twitter" value="#{i18n['page.navbar.topics']}" href="#{root}admin/analysis.xhtml"></b:navLink>
+            <b:navLink iconAwesome="bar-chart" value="#{i18n['page.navbar.results']}" href="#{root}users/results.xhtml"></b:navLink>
+            <b:navLink iconAwesome="group" value="#{i18n['page.navbar.users']}" href="#{root}admin/users.xhtml"></b:navLink>
+        </b:navbarLinks>
+        <b:navbarLinks pull="right">
+            <h:form>
+                <b:dropMenu value="#{user.name} - #{user.lastname}" icon-awesome="user" iconAlign="left">
+                    <b:navCommandLink iconAwesome="sign-out" value="#{i18n['page.navbar.dropdown.logout']}" action="#{authBean.logout()}"></b:navCommandLink>
+                </b:dropMenu>
+            </h:form>
         </b:navbarLinks>
     </b:navBar>
 </ui:fragment>
