@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/templates/app_template.xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="content">
+        <b:alert severity="warning">
+            <strong>#{i18n['errors.unauthorized.label']}</strong> 
+            #{i18n['errors.unauthorized.text']} 
+        </b:alert>
+    </ui:define>
+
+</ui:composition>

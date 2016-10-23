@@ -15,7 +15,7 @@
     </servlet-mapping>
     <context-param>
         <param-name>BootsFaces_THEME</param-name>
-        <param-value>flatly</param-value>
+        <param-value>darkly</param-value>
     </context-param>
     <session-config>
         <session-timeout>
@@ -25,7 +25,18 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
-    <!-- Protected Areas -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/unauthorized.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/notfound.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.xhtml</location>
+    </error-page>
     <security-constraint>
         <display-name>Admin operations</display-name>
         <web-resource-collection>
@@ -43,7 +54,7 @@
         <web-resource-collection>
             <web-resource-name>only users</web-resource-name>
             <description>users operations</description>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/users/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -66,10 +77,4 @@
         <description>Usuario normal</description>
         <role-name>USER</role-name>
     </security-role>
-    <ejb-local-ref>
-        <ejb-ref-name>FacadeBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>facade.FacadeBeanLocal</local>
-        <ejb-link>ejercicio1-ejb-1.0-SNAPSHOT#FacadeBean</ejb-link>
-    </ejb-local-ref>
 </web-app>
