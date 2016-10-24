@@ -6,9 +6,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:u="http://java.sun.com/jsf/composite/doublePassword">
     
-    <b:modal id="amodal" title="#{i18n['form.create.title']}"
+    <b:modal id="modal" title="#{i18n['form.create.title']}"
              closable="false" close-on-escape="false" backdrop="false">
-        
         <h:form>
             <b:messages />
             <b:row>
@@ -76,7 +75,7 @@
                     value="#{locationBean.country}" 
                     label="#{i18n['form.create.country.label']}"  
                     onchange="ajax:locationBean.changeCountry()" 
-                    update="@next" 
+                    update="@form:provinces" 
                     process="country" 
                     required="true"
                     tooltip="#{i18n['form.create.country.tooltip']}"

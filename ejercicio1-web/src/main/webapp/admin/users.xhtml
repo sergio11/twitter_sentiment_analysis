@@ -8,7 +8,10 @@
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="content">
-        
+        <!-- Include Modal for add user -->
+        <ui:include src="/WEB-INF/content/add-user.xhtml" />
+        <!-- Include Modal for delete contact -->
+        <ui:include src="/WEB-INF/content/confirm-delete-user.xhtml" />
         <h:form id="users">
             <b:messages />
             <b:dataTable
@@ -21,16 +24,16 @@
                 ajax="true" 
                 responsive="true">
                 <b:dataTableColumn label="#{i18n['datatable.users.name.label']}">
-                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.name}" />
-                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.name}" />                 
+                    <b:inputText rendered="#{user.userName eq usersBean.userToUpdate.userName}" value="#{usersBean.userToUpdate.name}" />
+                    <h:outputText rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="#{user.name}" />                 
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.lastname.label']}">
-                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.lastname}" />
-                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.lastname}" />
+                    <b:inputText rendered="#{user.userName eq usersBean.userToUpdate.userName}" value="#{usersBean.userToUpdate.lastname}" />
+                    <h:outputText rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="#{user.lastname}" />
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.birthdate.label']}">
                     <b:datepicker 
-                        rendered="#{user.id eq usersBean.contactToUpdate.id}" 
+                        rendered="#{user.userName eq usersBean.userToUpdate.userName}" 
                         id="birthday" 
                         mode="plain" 
                         value="#{usersBean.userToUpdate.birthday}" 
@@ -42,23 +45,23 @@
                     <h:outputFormat>
                         <f:param value="#{user.birthday}" />
                     </h:outputFormat>
-                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.birthday}" >
+                    <h:outputText rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="#{user.birthday}" >
                         <f:convertDateTime type="date" pattern="dd/MM/yy"/>
                     </h:outputText>
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.email.label']}" >
-                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.email}" type="email" />
-                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.email}" />
+                    <b:inputText rendered="#{user.userName eq usersBean.userToUpdate.userName}" value="#{usersBean.userToUpdate.email}" type="email" />
+                    <h:outputText rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="#{user.email}" />
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.mobile.label']}">
-                    <b:inputText rendered="#{user.id eq usersBean.userToUpdate.id}" value="#{usersBean.userToUpdate.mobile}" type="number" />
-                    <h:outputText rendered="#{user.id ne usersBean.userToUpdate.id}" value="#{user.mobile}" />
+                    <b:inputText rendered="#{user.userName eq usersBean.userToUpdate.userName}" value="#{usersBean.userToUpdate.mobile}" type="number" />
+                    <h:outputText rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="#{user.mobile}" />
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.actions.label']}" orderable="false">
-                    <b:buttonGroup>
-                        <b:commandButton value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#modal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.confirmDelete(user)}" update=":modal:content"/>
-                        <b:commandButton rendered="#{user.id ne usersBean.userToUpdate.id}" value="edit" look="warning" size="xs" icon-awesome="pencil"  actionListener="#{usersBean.editUser(user)}" ajax="true" update="@form"/>
-                        <b:commandButton rendered="#{user.id eq usersBean.userToUpdate.id}" value="save" look="success" size="xs" icon-awesome="floppy-o"  action="#{usersBean.update}" ajax="true" update="@form"/>
+                    <b:buttonGroup rendered="#{user.userName != sessionScope.user.userName}">
+                        <b:commandButton value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#modal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.confirmDelete(user)}" update=":deleteModal:content"/>
+                        <b:commandButton rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="edit" look="warning" size="xs" icon-awesome="pencil"  actionListener="#{usersBean.editUser(user)}" ajax="true" update="@form"/>
+                        <b:commandButton rendered="#{user.userName eq usersBean.userToUpdate.userName}" value="save" look="success" size="xs" icon-awesome="floppy-o"  action="#{usersBean.update}" ajax="true" update="@form"/>
                     </b:buttonGroup>
                 </b:dataTableColumn>
             </b:dataTable>
