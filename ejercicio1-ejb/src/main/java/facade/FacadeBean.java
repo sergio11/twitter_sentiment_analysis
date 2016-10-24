@@ -6,6 +6,7 @@
 package facade;
 
 import dao.CountryDAOBeanLocal;
+import dao.GroupDAOBeanLocal;
 import dao.ProvincesDAOBeanLocal;
 import dao.TopicDAOBeanLocal;
 import dao.TweetDAOBeanLocal;
@@ -22,6 +23,7 @@ import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import models.Country;
+import models.Group;
 import models.Province;
 import models.Topic;
 import models.TweetsBySentiment;
@@ -49,6 +51,9 @@ public class FacadeBean implements FacadeBeanLocal {
     private CountryDAOBeanLocal countryDAOBean;
     @EJB
     private UserDAOBeanLocal userDAOBean;
+    @EJB
+    private GroupDAOBeanLocal groupDAOBean;
+    
 
     @Override
     public void analyzeTopic(String text) {
@@ -106,6 +111,18 @@ public class FacadeBean implements FacadeBeanLocal {
     public User findUser(final String username) {
         return userDAOBean.find(username);
     }
+
+    @Override
+    public List<Group> getAllGroups() {
+        return groupDAOBean.all();
+    }
+
+    @Override
+    public Boolean existsUser(final String username) {
+        return userDAOBean.exists(username);
+    }
+    
+    
     
     
 }

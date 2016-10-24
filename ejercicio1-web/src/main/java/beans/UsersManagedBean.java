@@ -54,6 +54,7 @@ public class UsersManagedBean implements Serializable {
         this.users = users;
     }
 
+    
     public User getUserToDelete() {
         return userToDelete;
     }
@@ -93,6 +94,8 @@ public class UsersManagedBean implements Serializable {
     @PostConstruct
     protected void init(){
         users = facadeBean.getAllUsers();
+        // load groups
+        groups = facadeBean.getAllGroups();
     }
     
     public void update(){

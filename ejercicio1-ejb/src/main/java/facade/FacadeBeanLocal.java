@@ -8,6 +8,7 @@ package facade;
 import java.util.List;
 import javax.ejb.Local;
 import models.Country;
+import models.Group;
 import models.Province;
 import models.Topic;
 import models.TweetsBySentiment;
@@ -36,5 +37,9 @@ public interface FacadeBeanLocal {
     void removeUser(final User user);
 
     User findUser(final String username);
+
+    List<Group> getAllGroups();
+
+    Boolean existsUser(final String username);
     
 }

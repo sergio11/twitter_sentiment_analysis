@@ -6,16 +6,33 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:u="http://java.sun.com/jsf/composite/doublePassword">
     
-    <b:modal id="modal" title="#{i18n['form.create.title']}"
+    <b:modal id="addUserModel" title="#{i18n['form.create.title']}"
              closable="false" close-on-escape="false" backdrop="false">
         <h:form>
             <b:messages />
             <b:row>
                 <b:inputText 
                     type="text" 
-                    value="#{userBean.userToCreate.name}" 
+                    value="#{usersBean.userToCreate.userName}" 
+                    label="#{i18n['form.create.username.label']}" 
+                    required="true"
+                    col-md="12"
+                    tooltip="#{i18n['form.create.username.tooltip']}"
+                    tooltip-position="bottom"
+                    validator="#{userNameMustBeUniqueValidator.validate}">
+                    <f:validateLength minimum="3" maximum="15" />
+                    <f:facet name="prepend">
+                        <b:iconAwesome name="user" />
+                    </f:facet>
+                </b:inputText>
+            </b:row>
+            <b:row>
+                <b:inputText 
+                    type="text" 
+                    value="#{usersBean.userToCreate.name}" 
                     label="#{i18n['form.create.name.label']}" 
                     required="true"
+                    col-md="12"
                     tooltip="#{i18n['form.create.name.tooltip']}"
                     tooltip-position="bottom">
                     <f:validateLength minimum="3" maximum="15" />
@@ -27,9 +44,10 @@
             <b:row>
                 <b:inputText 
                     type="text" 
-                    value="#{userBean.userToCreate.lastname}" 
+                    value="#{usersBean.userToCreate.lastname}" 
                     label="#{i18n['form.create.lastname.label']}" 
                     required="true"
+                    col-md="12"
                     tooltip="#{i18n['form.create.lastname.tooltip']}"
                     tooltip-position="bottom">
                     <f:validateLength minimum="3" maximum="15" />
@@ -42,7 +60,7 @@
                 <b:inputText 
                     id="email"
                     type="email"
-                    value="#{userBean.userToCreate.email}"
+                    value="#{usersBean.userToCreate.email}"
                     label="#{i18n['form.create.email.label']}"
                     col-md="12"
                     tooltip="#{i18n['form.create.email.tooltip']}" 
@@ -58,7 +76,7 @@
                 <b:inputText
                     id="mobile"
                     type="number"
-                    value="#{userBean.userToCreate.mobile}"
+                    value="#{usersBean.userToCreate.mobile}"
                     label="#{i18n['form.create.mobile.label']}"
                     col-md="12"
                     tooltip="#{i18n['form.create.mobile.tooltip']}" 
@@ -78,6 +96,7 @@
                     update="@form:provinces" 
                     process="country" 
                     required="true"
+                    col-md="12"
                     tooltip="#{i18n['form.create.country.tooltip']}"
                     tooltip-position="bottom">
                     <f:selectItems value="#{locationBean.countries}" var="c" itemValue="#{c.id}" itemLabel="#{c.name}"/>
@@ -86,19 +105,25 @@
             <b:row>
                 <b:selectOneMenu
                     id="provinces"
-                    value="#{userBean.userToCreate.province}" 
+                    value="#{usersBean.userToCreate.province}" 
                     label="#{i18n['form.create.province.label']}" 
                     disabled="${empty locationBean.provincesSelected}"
                     required="true"
+                    col-md="12"
                     tooltip="#{i18n['form.create.province.tooltip']}"
                     tooltip-position="bottom">
                     <f:selectItems value="#{locationBean.provincesSelected}" var="p" itemValue="#{p}" itemLabel="#{p.name}"/>
                 </b:selectOneMenu>
             </b:row>
-            <h:selectOneRadio value="#{userBean.userToCreate.group}">
-                <f:selectItems value="#{userBean.groups}"/>
-            </h:selectOneRadio>
-            <u:doublePassword value="#{userBean.userToCreate.password}">
+            <b:row>
+                <b:column colMd="12">
+                    <h:outputLabel value="#{i18n['form.create.group.label']}" for="groups" />
+                    <h:selectOneRadio value="#{usersBean.userToCreate.group}" id="groups" required="true">
+                        <f:selectItems value="#{usersBean.groups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
+                    </h:selectOneRadio>
+                </b:column>
+            </b:row>
+            <u:doublePassword value="#{usersBean.userToCreate.password}">
                 <f:validateLength minimum="4" for="password"/>
             </u:doublePassword>
              <b:row>
@@ -108,15 +133,15 @@
                     col-md="12"
                     tooltip="#{i18n['form.create.birthday.tooltip']}" 
                     tooltip-position="bottom"
-                    value="#{userBean.userToCreate.birthday}"
+                    value="#{usersBean.userToCreate.birthday}"
                     required="true">
                     <f:convertDateTime pattern="dd/MM/yy" />
                 </b:datepicker>
             </b:row>
             <b:fetchBeanInfos />
-            <b:row>
+            <b:row style="margin-top: 5rem">
                 <b:buttonGroup pull="right">
-                    <b:commandButton value="#{i18n['form.create.submit.label']}" look="success" action="#{userBean.save}" ajax="true" update="@form, @form:users" />
+                    <b:commandButton value="#{i18n['form.create.submit.label']}" look="success" action="#{usersBean.save}" ajax="true" update="@form, @form:users" />
                     <b:button value="#{i18n['form.create.cancel']}" dismiss="modal"/>
                 </b:buttonGroup>
             </b:row>

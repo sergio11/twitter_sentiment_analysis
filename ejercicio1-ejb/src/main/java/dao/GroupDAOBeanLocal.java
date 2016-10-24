@@ -7,20 +7,15 @@ package dao;
 
 import java.util.List;
 import javax.ejb.Local;
-import models.User;
+import models.Group;
 
 /**
  *
  * @author sergio
  */
 @Local
-public interface UserDAOBeanLocal {
+public interface GroupDAOBeanLocal {
 
-    void persist(final User user);
-    List<User> all();
-    void remove(final User user);
-    User find(final String username);
-
-    Boolean exists(final String username);
+    List<Group> all();
     
 }

@@ -6,7 +6,7 @@
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <b:modal id="deleteModal" title="#{i18n['form.remove.title']}">
-        <h:outputFormat id="content" value="#{msgs['pages.user.hello']}">
+        <h:outputFormat id="content" value="#{i18n['form.remove.text']}">
             <f:param value="#{usersBean.userToDelete.getFullname()}"/>
         </h:outputFormat>
         <f:facet name="footer">

@@ -61,4 +61,16 @@ public class UserDAOBean implements UserDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Boolean exists(final String username) {
+        try {
+            return em.createNamedQuery("User.find", User.class).setParameter("username", username).getResultList().size() == 1;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
 }
