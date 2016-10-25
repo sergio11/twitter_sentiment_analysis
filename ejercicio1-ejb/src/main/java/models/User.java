@@ -37,7 +37,7 @@ public class User implements Serializable {
     @Column(name = "USER_NAME")
     private String userName;
     @Column(name = "PASSWD", length = 32,columnDefinition = "VARCHAR(32)")
-    private char[] password;
+    private String password;
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Group group;
     private String name;
@@ -57,13 +57,14 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public char[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(char[] password) {
-        this.password = password;
+    public void setPassword(String password) {
+        this.password = hashPassword(password);
     }
+
 
     public Group getGroup() {
         return group;
@@ -150,15 +151,15 @@ public class User implements Serializable {
     }
 
    
-    private char[] hashPassword(char[] password) {
-        char[] encoded = null;
+    private String hashPassword(String password) {
+        String encoded = null;
         try {
             ByteBuffer passwdBuffer = 
               Charset.defaultCharset().encode(CharBuffer.wrap(password));
             byte[] passwdBytes = passwdBuffer.array();
             MessageDigest mdEnc = MessageDigest.getInstance("MD5");
-            mdEnc.update(passwdBytes, 0, password.length);
-            encoded = new BigInteger(1, mdEnc.digest()).toString(16).toCharArray();
+            mdEnc.update(passwdBytes, 0, password.length());
+            encoded = new BigInteger(1, mdEnc.digest()).toString(16);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -31,4 +31,16 @@ public class GroupDAOBean implements GroupDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Group byId(final Long id) {
+        try {
+            return em.find(Group.class, id);
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
 }

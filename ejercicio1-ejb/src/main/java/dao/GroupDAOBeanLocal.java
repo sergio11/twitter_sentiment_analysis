@@ -17,5 +17,7 @@ import models.Group;
 public interface GroupDAOBeanLocal {
 
     List<Group> all();
+
+    Group byId(final Long id);
     
 }

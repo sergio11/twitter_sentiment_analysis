@@ -121,8 +121,14 @@ public class FacadeBean implements FacadeBeanLocal {
     public Boolean existsUser(final String username) {
         return userDAOBean.exists(username);
     }
-    
-    
-    
-    
+
+    @Override
+    public List<Topic> topicsByUser(final String userName) {
+        return topicDAOBean.byUser(userName);
+    }
+
+    @Override
+    public Group getGroupById(final Long id) {
+        return groupDAOBean.byId(id);
+    }
 }

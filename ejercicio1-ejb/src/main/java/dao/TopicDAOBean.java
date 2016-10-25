@@ -42,5 +42,17 @@ public class TopicDAOBean implements TopicDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Topic> byUser(final String username) {
+        try {
+            return em.createNamedQuery("TopicsByUser").setParameter("userName", username).getResultList();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
     
 }

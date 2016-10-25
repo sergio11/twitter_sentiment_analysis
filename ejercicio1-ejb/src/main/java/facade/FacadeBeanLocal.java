@@ -41,5 +41,9 @@ public interface FacadeBeanLocal {
     List<Group> getAllGroups();
 
     Boolean existsUser(final String username);
+
+    List<Topic> topicsByUser(final String userName);
+
+    Group getGroupById(final Long id);
     
 }

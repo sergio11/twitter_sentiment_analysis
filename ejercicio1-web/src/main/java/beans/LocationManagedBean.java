@@ -11,7 +11,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import models.Country;
 import models.Province;
 
@@ -20,7 +20,7 @@ import models.Province;
  * @author sergio
  */
 @ManagedBean(name = "locationBean")
-@RequestScoped
+@ViewScoped
 public class LocationManagedBean {
     
     @EJB

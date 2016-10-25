@@ -9,32 +9,55 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <ui:fragment rendered="#{not empty request.remoteUser}">
-            <p>Welcome, #{user.name}!</p>
-        </ui:fragment>
-        <h:form>
-            <b:inputText placeholder="Type something here..." value="#{twitterSearch.text}">
-                <f:facet name="prepend">
-                    <b:iconAwesome name="search" />
-                </f:facet>
-                <f:facet name="append">
-                    <b:commandButton 
-                        value="Search" 
-                        look="success"  
-                        action="#{twitterSearch.search}" 
-                        update="@form:results" />
-                </f:facet>
-            </b:inputText>
-        </h:form>
-        <b:row id="results">
-            <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
-                <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
+        
+        <b:tabView activeIndex="0">
+            <b:tab title="#{i18n['page.topics.tabs.all']}">
+                <h:form id="users">
+                    <b:messages />
+                    <b:dataTable
+                        id="topicsTable"
+                        value="#{topicsManagedBean.topics}"
+                        fixedHeader="true"
+                        scroll-size="300px"
+                        scroll-x="false"
+                        var="topic" 
+                        ajax="true" 
+                        responsive="true">
+                        <b:dataTableColumn label="#{i18n['datatable.topics.id.label']}" value="#{topic.id}" />
+                        <b:dataTableColumn label="#{i18n['datatable.topics.name.label']}" value="#{topic.name}" />
+                        <b:dataTableColumn label="#{i18n['datatable.topics.tweets.label']}" value="#{topic.tweets.size()}" />
+                    </b:dataTable>
+                </h:form>
+            </b:tab>
+            <b:tab title="#{i18n['page.topics.tabs.analyze']}">
+                <f:facet name="anchor"><b:iconAwesome name="cog" spin="true" /></f:facet>
+                <b:row>
                     <h:form>
-                        <p:poll interval="3" listener="#{liveSentimentChartBean.updateChart(twitterSearch.text)}" update="sentimentChart"  />
-                        <p:chart id="sentimentChart" type="pie" model="#{liveSentimentChartBean.liveCharts.get(twitterSearch.text)}" style="width:400px;height:300px"/>
+                        <b:inputText col-md="6" offset-md="3" placeholder="Type something here..." value="#{twitterSearch.text}">
+                            <f:facet name="prepend">
+                                <b:iconAwesome name="search" />
+                            </f:facet>
+                            <f:facet name="append">
+                                <b:commandButton 
+                                    value="Search" 
+                                    look="success"  
+                                    action="#{twitterSearch.search}" 
+                                    update="@form:results" />
+                            </f:facet>
+                        </b:inputText>
                     </h:form>
-                </b:panel>
-            </c:if>
-        </b:row>
+                </b:row>
+                <b:row id="results">
+                    <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
+                        <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
+                            <h:form>
+                                <p:poll interval="3" listener="#{liveSentimentChartBean.updateChart(twitterSearch.text)}" update="sentimentChart"  />
+                                <p:chart id="sentimentChart" type="pie" model="#{liveSentimentChartBean.liveCharts.get(twitterSearch.text)}" style="width:400px;height:300px"/>
+                            </h:form>
+                        </b:panel>
+                    </c:if>
+                </b:row>
+            </b:tab>
+        </b:tabView>
     </ui:define>
 </ui:composition>

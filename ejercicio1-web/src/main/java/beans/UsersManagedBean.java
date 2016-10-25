@@ -47,6 +47,7 @@ public class UsersManagedBean implements Serializable {
     }
 
     public List<User> getUsers() {
+        users = facadeBean.getAllUsers();
         return users;
     }
 
@@ -93,7 +94,6 @@ public class UsersManagedBean implements Serializable {
     
     @PostConstruct
     protected void init(){
-        users = facadeBean.getAllUsers();
         // load groups
         groups = facadeBean.getAllGroups();
     }

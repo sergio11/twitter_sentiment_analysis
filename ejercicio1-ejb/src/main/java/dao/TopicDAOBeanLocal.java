@@ -19,5 +19,7 @@ public interface TopicDAOBeanLocal {
     void persist(final Topic topic);
 
     List<Topic> all();
+
+    List<Topic> byUser(final String username);
     
 }

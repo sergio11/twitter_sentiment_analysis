@@ -7,12 +7,14 @@ package models;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -28,7 +30,8 @@ import javax.persistence.UniqueConstraint;
         uniqueConstraints
         = @UniqueConstraint(columnNames = {"name"}))
 @NamedQueries({
-    @NamedQuery(name = "Topic.all", query = "SELECT t FROM Topic t")
+    @NamedQuery(name = "Topic.all", query = "SELECT t FROM Topic t"),
+    @NamedQuery(name = "TopicsByUser", query = "SELECT t FROM Topic t WHERE t.user.userName = :userName")
 })
 public class Topic implements Serializable {
 
@@ -38,6 +41,8 @@ public class Topic implements Serializable {
     private String name;
     @OneToMany(cascade = ALL, mappedBy = "topic")
     private List<Tweet> tweets;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    private User user;
 
     public Topic(String name) {
         this.name = name;
@@ -66,4 +71,11 @@ public class Topic implements Serializable {
         this.tweets = tweets;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
