@@ -25,6 +25,7 @@ import models.User;
 @ManagedBean(name = "topicsManagedBean")
 @RequestScoped
 public class TopicsManagedBean {
+    
     @EJB
     private FacadeBeanLocal facadeBean;
     @ManagedProperty("#{i18n}")
@@ -38,6 +39,16 @@ public class TopicsManagedBean {
     public void setI18n(ResourceBundle i18n) {
         this.i18n = i18n;
     }
+
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
+    }
+    
+    
     
     @PostConstruct
     protected void init(){

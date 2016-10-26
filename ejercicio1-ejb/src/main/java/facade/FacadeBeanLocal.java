@@ -21,29 +21,19 @@ import models.User;
 @Local
 public interface FacadeBeanLocal {
 
-    void analyzeTopic(String topic);
+    void analyzeTopic(final Topic topic);
     List<Topic> getTopics();
     List<TweetsBySentiment> groupedBySentiment(final String topic);
     List<Country> getCountries();
-
     List<Province> getProvinces();
-
     List<Province> getProvincesByCountry(final Long country);
-
     void persistUser(final User user);
-
     List<User> getAllUsers();
-
     void removeUser(final User user);
-
     User findUser(final String username);
-
     List<Group> getAllGroups();
-
     Boolean existsUser(final String username);
-
     List<Topic> topicsByUser(final String userName);
-
     Group getGroupById(final Long id);
     
 }

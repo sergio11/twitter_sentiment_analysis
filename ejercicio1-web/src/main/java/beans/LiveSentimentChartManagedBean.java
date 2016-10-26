@@ -14,26 +14,40 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.Session;
+import models.Tweet;
 import models.TweetsBySentiment;
 import org.primefaces.model.chart.PieChartModel;
-
 /**
  *
  * @author sergio
  */
 @ManagedBean(name = "liveSentimentChartBean")
-@SessionScoped
-public class LiveSentimentChartManagedBean implements Serializable {
-    
-    @EJB
-    private FacadeBeanLocal facadeBean;
+@ViewScoped
+public class LiveSentimentChartManagedBean implements Serializable, MessageListener {
+    @Resource(mappedName = "jms/tweetsProcessedQueueFactory")
+    private ConnectionFactory queueFactory;
+    @Resource(mappedName = "jms/tweetsProcessedQueue")
+    private Queue tweetsProcessedQueue;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private final Map<String, PieChartModel> liveCharts = new HashMap();
+    Connection qConnection;
 
     public ResourceBundle getI18n() {
         return i18n;
@@ -46,24 +60,31 @@ public class LiveSentimentChartManagedBean implements Serializable {
     public Map<String, PieChartModel> getLiveCharts() {
         return liveCharts;
     }
+    
+    @PostConstruct
+    protected void init(){
+        try {
+            qConnection = queueFactory.createConnection();
+            Session session = qConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            MessageConsumer consumer = session.createConsumer(tweetsProcessedQueue);
+            consumer.setMessageListener(this);
+            qConnection.start();
+        } catch (Exception ex) {
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
   
-   
-    public void updateChart(final String topic){
-        PieChartModel chart =  liveCharts != null ? liveCharts.get(topic) : null;
-        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
-        if(chart != null){
-            List<TweetsBySentiment> tbsList = facadeBean.groupedBySentiment(topic);
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "Result count: " + tbsList.size());
-            Iterator<TweetsBySentiment> iteTbs = tbsList.iterator();
-            while (iteTbs.hasNext()) {
-                TweetsBySentiment tbs = iteTbs.next();
-                String label = tbs.getSentiment().name();
-                chart.set(label, tbs.getTweets());
+    @PreDestroy
+    protected void destroy() {
+        if (qConnection != null) {
+            try {
+                qConnection.close();
+            } catch (JMSException ex) {
+                Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        liveCharts.put(topic, chart);
-    
     }
+    
     public void createChart(String topic){
         PieChartModel pieChart = new PieChartModel();
         pieChart.setTitle("Custom Pie");
@@ -73,6 +94,25 @@ public class LiveSentimentChartManagedBean implements Serializable {
         pieChart.setDiameter(150);
         liveCharts.put(topic, pieChart);
         Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "Topic: " + topic);
+    }
+
+    @Override
+    public void onMessage(Message message) {
+        try {
+            ObjectMessage msg = (ObjectMessage) message;
+            Tweet tweetProcessed = (Tweet) msg.getObject();
+            PieChartModel chart =  liveCharts != null ? liveCharts.get(tweetProcessed.getTopic().getName()) : null;
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
+            if(chart != null){
+                String label = tweetProcessed.getSentiment().name();
+                Map<String, Number> data = chart.getData();
+                data.put(label, data.get(label).intValue() + 1);
+                chart.setData(data);
+            }
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + tweetProcessed.getText());
+        } catch (JMSException ex) {
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

@@ -35,9 +35,8 @@ import models.User;
  */
 @Stateless
 public class FacadeBean implements FacadeBeanLocal {
-    
-    @Resource(mappedName = "jms/QueueReceptor")
-    private Queue queueReceptor;
+    @Resource(mappedName = "jms/topicsQueue")
+    private Queue topicsQueue;
     @Inject
     @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
     private JMSContext context;
@@ -56,15 +55,14 @@ public class FacadeBean implements FacadeBeanLocal {
     
 
     @Override
-    public void analyzeTopic(String text) {
-        Logger.getLogger(FacadeBean.class.getName()).log(Level.INFO, "Topic to analyze: " + text);
-        Topic topic = new Topic(text.toLowerCase());
+    public void analyzeTopic(final Topic topic) {
+        Logger.getLogger(FacadeBean.class.getName()).log(Level.INFO, "Topic to analyze: " + topic.getName());
         //save topic
         topicDAOBean.persist(topic);
         // enqueue message
         ObjectMessage message = 
                   context.createObjectMessage(topic);
-        context.createProducer().send(queueReceptor, message);
+        context.createProducer().send(topicsQueue, message);
     }
 
     @Override
@@ -131,4 +129,5 @@ public class FacadeBean implements FacadeBeanLocal {
     public Group getGroupById(final Long id) {
         return groupDAOBean.byId(id);
     }
+
 }

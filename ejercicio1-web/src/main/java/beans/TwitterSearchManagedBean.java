@@ -10,21 +10,25 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import models.Topic;
 import models.Tweet;
+import models.User;
 
 /**
  *
  * @author sergio
  */
 @ManagedBean(name = "twitterSearch")
-@SessionScoped
+@ViewScoped
 public class TwitterSearchManagedBean implements Serializable {
     
     @EJB
@@ -33,6 +37,7 @@ public class TwitterSearchManagedBean implements Serializable {
     private LiveSentimentChartManagedBean liveSentimentChartBean;
     private String text;
     private List<Tweet> result;
+    private User currentUser;
 
     public LiveSentimentChartManagedBean getLiveSentimentChartBean() {
         return liveSentimentChartBean;
@@ -58,11 +63,21 @@ public class TwitterSearchManagedBean implements Serializable {
     private void addMessage(FacesMessage message){
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    
+    @PostConstruct
+    protected void init(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        currentUser = (User)externalContext.getSessionMap().get("user");
+    }
 
     public void search(){
         try {
+            Topic topic = new Topic();
+            topic.setName(text);
+            topic.setUser(currentUser);
             // analyze topic
-            facadeBean.analyzeTopic(text);
+            facadeBean.analyzeTopic(topic);
             // create live chart for topic
             liveSentimentChartBean.createChart(text);
             // add confirmation message

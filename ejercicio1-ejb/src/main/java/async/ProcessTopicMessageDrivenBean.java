@@ -16,10 +16,14 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import models.Sentiment;
 import models.Topic;
 import models.Tweet;
@@ -29,11 +33,16 @@ import models.Tweet;
  * @author sergio
  */
 @MessageDriven(activationConfig = {
-    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/QueueReceptor"),
+    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/topicsQueue"),
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
 public class ProcessTopicMessageDrivenBean implements MessageListener {
     
+    @Resource(mappedName = "jms/tweetsProcessedQueue")
+    private Queue tweetsProcessedQueue;
+    @Inject
+    @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
+    private JMSContext context;
     @Resource
     private MessageDrivenContext mdctx;
     @EJB
@@ -42,7 +51,6 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
     @EJB
     private TweetDAOBeanLocal tweetDAOBean;
-   
     
     @Override
     public void onMessage(Message message) {
@@ -57,17 +65,24 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 Sentiment sentiment = sentimentAnalyzerBean.findSentiment(tweet.getText());
                 tweet.setSentiment(sentiment);
                 tweet.setTopic(topic);
-                // persist tweet
-                tweetDAOBean.persist(tweet);
+                // enqueue processed tweet
+                enqueueProcessedTweet(tweet);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            tweetDAOBean.persist(tweets);
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
         }   
+    }
+
+    private void enqueueProcessedTweet(Tweet tweetProcessed) {
+        ObjectMessage message = 
+                  context.createObjectMessage(tweetProcessed);
+        context.createProducer().send(tweetsProcessedQueue, message);
     }
     
 }

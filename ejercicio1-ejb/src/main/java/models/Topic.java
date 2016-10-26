@@ -34,7 +34,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "TopicsByUser", query = "SELECT t FROM Topic t WHERE t.user.userName = :userName")
 })
 public class Topic implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

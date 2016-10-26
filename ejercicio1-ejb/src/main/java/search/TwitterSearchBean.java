@@ -44,10 +44,10 @@ public class TwitterSearchBean implements TwitterSearchBeanLocal {
     @PostConstruct
     public void init() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true).setOAuthConsumerKey(oauthConsumerKey)
-                .setOAuthConsumerSecret(oauthConsumerSecret)
-                .setOAuthAccessToken(oauthAccessToken)
-                .setOAuthAccessTokenSecret(oauthAccessTokenSecret);
+        cb.setDebugEnabled(true).setOAuthConsumerKey("tyyEHDfVKxsBqQWTeWgPkRhZd")
+                .setOAuthConsumerSecret("94MPLfuaVzrWDo6RKc06MnuiJMz1yMkLvcO3wyqd6WtxIpSte0")
+                .setOAuthAccessToken("169980309-qZqlDKT3XSdoki1WBmQFLHANx7QEyGxxm5tEN7gu")
+                .setOAuthAccessTokenSecret("NjVrRzShxNkzyvUD5kn3KcvNvfQrelJXpzfljnSQeq9Ef");
         TwitterFactory tf = new TwitterFactory(cb.build());
         twitter = tf.getInstance();
     }
