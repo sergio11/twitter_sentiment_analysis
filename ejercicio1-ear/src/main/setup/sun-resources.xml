@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE resources PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 Resource Definitions //EN" "http://www.sun.com/software/appserver/dtds/sun-resources_1_3.dtd">
 <resources>
+  <jdbc-resource enabled="true" jndi-name="jdbc/sentimentDataSource" object-type="user" pool-name="connectionPool">
+    <description/>
+  </jdbc-resource>
   <admin-object-resource enabled="true" jndi-name="jms/topicsQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
     <description>Queue for Topics processing</description>
     <property name="Name" value="topicsQueue"/>
@@ -15,6 +18,14 @@
   <connector-resource enabled="true" jndi-name="jms/tweetsProcessedTopicFactory" object-type="user" pool-name="jms/tweetsProcessedTopicFactory-Connection-Pool">
     <description/>
   </connector-resource>
+  <jdbc-connection-pool allow-non-component-callers="false" associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" connection-validation-method="auto-commit" datasource-classname="org.apache.derby.jdbc.ClientDataSource" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" is-isolation-level-guaranteed="true" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="false" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="connectionPool" non-transactional-connections="false" pool-resize-quantity="2" res-type="javax.sql.DataSource" statement-timeout-in-seconds="-1" steady-pool-size="8" validate-atmost-once-period-in-seconds="0" wrap-jdbc-objects="false">
+    <property name="URL" value="jdbc:derby://localhost:1527/sentiment"/>
+    <property name="serverName" value="localhost"/>
+    <property name="PortNumber" value="1527"/>
+    <property name="DatabaseName" value="sentiment"/>
+    <property name="User" value="sergio11"/>
+    <property name="Password" value="bisite00"/>
+  </jdbc-connection-pool>
   <connector-connection-pool associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-definition-name="javax.jms.QueueConnectionFactory" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="true" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="jms/topicsQueueFactory-Connection-Pool" pool-resize-quantity="2" resource-adapter-name="jmsra" steady-pool-size="8" validate-atmost-once-period-in-seconds="0"/>
   <connector-connection-pool associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-definition-name="javax.jms.TopicConnectionFactory" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="true" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="jms/tweetsProcessedTopicFactory-Connection-Pool" pool-resize-quantity="2" resource-adapter-name="jmsra" steady-pool-size="8" validate-atmost-once-period-in-seconds="0"/>
 </resources>
