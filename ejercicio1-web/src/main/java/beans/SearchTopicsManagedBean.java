@@ -7,7 +7,6 @@ package beans;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import facade.FacadeBeanLocal;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -16,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import models.Topic;
 import org.apache.commons.lang3.StringUtils;
+import services.TopicsServiceBeanLocal;
 
 /**
  *
@@ -25,14 +25,14 @@ import org.apache.commons.lang3.StringUtils;
 @SessionScoped
 public class SearchTopicsManagedBean implements Serializable {
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private TopicsServiceBeanLocal topicsServiceBean;
     private List<Topic> topics;
     private String topicsCSV;
     private List<String> topicsSelected;
     
     @PostConstruct
     protected void init(){
-        topics = facadeBean.getTopics();
+        topics = topicsServiceBean.getTopics();
         List<String> topicNames = Lists.transform(topics, new Function<Topic, String>(){
             @Override
             public String apply(Topic topic) {

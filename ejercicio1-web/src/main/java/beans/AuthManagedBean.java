@@ -6,7 +6,6 @@
 package beans;
 
 
-import facade.FacadeBeanLocal;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -23,6 +22,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import models.User;
+import services.UserServiceBeanLocal;
 
 /**
  *
@@ -32,7 +32,7 @@ import models.User;
 @ViewScoped
 public class AuthManagedBean {
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private UserServiceBeanLocal userServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private String username;
@@ -84,7 +84,7 @@ public class AuthManagedBean {
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
         try {
             request.login(username, password);
-            User user = facadeBean.findUser(username);
+            User user = userServiceBean.find(username);
             externalContext.getSessionMap().put("user", user);
             externalContext.redirect(originalURL);
         } catch (ServletException e) {

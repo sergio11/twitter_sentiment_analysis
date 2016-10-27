@@ -5,7 +5,6 @@
  */
 package beans;
 
-import facade.FacadeBeanLocal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -14,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import models.Country;
 import models.Province;
+import services.LocationServiceBeanLocal;
 
 /**
  *
@@ -22,9 +22,8 @@ import models.Province;
 @ManagedBean(name = "locationBean")
 @ViewScoped
 public class LocationManagedBean {
-    
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private LocationServiceBeanLocal locationServiceBean;
     private Long country;
     private List<Country> countries = new ArrayList();
     private List<Province> provincesSelected = new ArrayList();
@@ -32,7 +31,7 @@ public class LocationManagedBean {
     @PostConstruct
     public void init(){
         // load countries
-        countries = facadeBean.getCountries();
+        countries = locationServiceBean.getCountries();
     }
 
     public List<Country> getCountries() {
@@ -56,7 +55,7 @@ public class LocationManagedBean {
     }
     
     public void changeCountry(){
-        provincesSelected = facadeBean.getProvincesByCountry(country);
+        provincesSelected = locationServiceBean.getProvincesByCountry(country);
     }
     
 }

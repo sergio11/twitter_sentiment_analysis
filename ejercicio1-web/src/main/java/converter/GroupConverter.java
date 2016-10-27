@@ -5,7 +5,6 @@
  */
 package converter;
 
-import facade.FacadeBeanLocal;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +20,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import models.Group;
+import services.UserServiceBeanLocal;
 
 /**
  *
@@ -31,7 +31,7 @@ import models.Group;
 @FacesConverter(forClass = Group.class)
 public class GroupConverter implements Converter {
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private UserServiceBeanLocal userServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
 
@@ -46,7 +46,7 @@ public class GroupConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         try{
-            return facadeBean.getGroupById(Long.valueOf(value));
+            return userServiceBean.getGroupById(Long.valueOf(value));
         }catch(EJBException e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new ConverterException(new FacesMessage(i18n.getString("errors.converter.group")));

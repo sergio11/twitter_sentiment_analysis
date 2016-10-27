@@ -5,7 +5,6 @@
  */
 package beans;
 
-import facade.FacadeBeanLocal;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,6 +21,7 @@ import javax.faces.context.FacesContext;
 import models.Topic;
 import models.Tweet;
 import models.User;
+import services.TopicsServiceBeanLocal;
 
 /**
  *
@@ -30,9 +30,8 @@ import models.User;
 @ManagedBean(name = "twitterSearch")
 @ViewScoped
 public class TwitterSearchManagedBean implements Serializable {
-    
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private TopicsServiceBeanLocal topicsServiceBean;
     @ManagedProperty("#{liveSentimentChartBean}")
     private LiveSentimentChartManagedBean liveSentimentChartBean;
     private String text;
@@ -77,7 +76,7 @@ public class TwitterSearchManagedBean implements Serializable {
             topic.setName(text);
             topic.setUser(currentUser);
             // analyze topic
-            facadeBean.analyzeTopic(topic);
+            topicsServiceBean.analyzeTopic(topic);
             // create live chart for topic
             liveSentimentChartBean.createChart(text);
             // add confirmation message

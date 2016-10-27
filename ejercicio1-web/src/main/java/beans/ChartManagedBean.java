@@ -5,8 +5,6 @@
  */
 package beans;
 
-import facade.FacadeBeanLocal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -22,6 +20,7 @@ import javax.faces.bean.SessionScoped;
 import models.TweetsBySentiment;
 import org.primefaces.model.chart.DonutChartModel;
 import org.primefaces.model.chart.PieChartModel;
+import services.TweetsServiceBeanLocal;
 
 
 /**
@@ -31,9 +30,8 @@ import org.primefaces.model.chart.PieChartModel;
 @ManagedBean(name = "chartBean")
 @SessionScoped
 public class ChartManagedBean {
-    
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private TweetsServiceBeanLocal tweetsServiceBean;
     @ManagedProperty("#{searchTopicBean}")
     private SearchTopicsManagedBean searchTopicBean;
     @ManagedProperty("#{i18n}")
@@ -55,13 +53,6 @@ public class ChartManagedBean {
         return searchTopicBean;
     }
 
-    public FacadeBeanLocal getFacadeBean() {
-        return facadeBean;
-    }
-
-    public void setFacadeBean(FacadeBeanLocal facadeBean) {
-        this.facadeBean = facadeBean;
-    }
    
     public void setSearchTopicBean(SearchTopicsManagedBean searchTopicBean) {
         this.searchTopicBean = searchTopicBean;
@@ -113,7 +104,7 @@ public class ChartManagedBean {
         while(ite.hasNext()){
             String topic = ite.next();
             if(!donutCharts.containsKey(topic) || !pieCharts.containsKey(topic)){
-                List<TweetsBySentiment> result = facadeBean.groupedBySentiment(topic);
+                List<TweetsBySentiment> result = tweetsServiceBean.groupedBySentiment(topic);
                 Logger.getLogger(ChartManagedBean.class.getName()).log(Level.INFO, "Result Count: " + result.size());
                 if(!donutCharts.containsKey(topic))
                     donutCharts.put(topic, createDonutChart(result));

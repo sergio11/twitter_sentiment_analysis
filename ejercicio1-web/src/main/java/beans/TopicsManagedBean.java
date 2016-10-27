@@ -5,11 +5,8 @@
  */
 package beans;
 
-import facade.FacadeBeanLocal;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -20,6 +17,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import models.Topic;
 import models.User;
+import services.TopicsServiceBeanLocal;
 
 /**
  *
@@ -28,9 +26,8 @@ import models.User;
 @ManagedBean(name = "topicsManagedBean")
 @ViewScoped
 public class TopicsManagedBean {
-    
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private TopicsServiceBeanLocal topicsServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private List<Topic> topics;
@@ -67,7 +64,7 @@ public class TopicsManagedBean {
         ExternalContext externalContext = context.getExternalContext();
         User currentUser = (User) externalContext.getSessionMap().get("user");
         // load topics for this user
-        topics = facadeBean.topicsByUser(currentUser.getUserName());
+        topics = topicsServiceBean.getTopicsByUser(currentUser.getUserName());
     }
     
     public void confirmDelete(Topic t){
@@ -75,7 +72,7 @@ public class TopicsManagedBean {
     }
     
     public void remove(){
-        facadeBean.removeTopic(topicToDelete);
+        topicsServiceBean.remove(topicToDelete);
         // add confirmation message
         FacesMessage message = new FacesMessage();
         message.setSeverity(FacesMessage.SEVERITY_INFO);

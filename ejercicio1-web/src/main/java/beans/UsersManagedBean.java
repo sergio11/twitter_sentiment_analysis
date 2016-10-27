@@ -6,7 +6,6 @@
 package beans;
 
 
-import facade.FacadeBeanLocal;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -19,6 +18,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import models.Group;
 import models.User;
+import services.UserServiceBeanLocal;
 
 /**
  *
@@ -27,9 +27,8 @@ import models.User;
 @ManagedBean(name = "usersBean")
 @SessionScoped
 public class UsersManagedBean implements Serializable {
-    
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private UserServiceBeanLocal userServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private List<User> users;
@@ -47,7 +46,7 @@ public class UsersManagedBean implements Serializable {
     }
 
     public List<User> getUsers() {
-        users = facadeBean.getAllUsers();
+        users = userServiceBean.getAll();
         return users;
     }
 
@@ -95,12 +94,12 @@ public class UsersManagedBean implements Serializable {
     @PostConstruct
     protected void init(){
         // load groups
-        groups = facadeBean.getAllGroups();
+        groups = userServiceBean.getAllGroups();
     }
     
     public void update(){
         // call to EJB for persist contact
-        facadeBean.persistUser(userToUpdate);
+        userServiceBean.persist(userToUpdate);
         // add confirmation message
         FacesMessage message = new FacesMessage();
         message.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -112,7 +111,7 @@ public class UsersManagedBean implements Serializable {
     
     public void create(){
         // call to EJB for persist contact
-        facadeBean.persistUser(userToCreate);
+        userServiceBean.persist(userToCreate);
         // add confirmation message
         FacesMessage message = new FacesMessage();
         message.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -123,7 +122,7 @@ public class UsersManagedBean implements Serializable {
     }
     
     public void delete(){
-        facadeBean.removeUser(userToDelete);
+        userServiceBean.remove(userToDelete);
         // add confirmation message
         FacesMessage message = new FacesMessage();
         message.setSeverity(FacesMessage.SEVERITY_INFO);

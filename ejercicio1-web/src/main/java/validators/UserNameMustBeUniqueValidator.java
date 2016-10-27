@@ -5,7 +5,6 @@
  */
 package validators;
 
-import facade.FacadeBeanLocal;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -17,6 +16,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import services.UserServiceBeanLocal;
 
 /**
  *
@@ -26,7 +26,7 @@ import javax.faces.validator.ValidatorException;
 @RequestScoped
 public class UserNameMustBeUniqueValidator implements Validator{
     @EJB
-    private FacadeBeanLocal facadeBean;
+    private UserServiceBeanLocal userServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
 
@@ -42,7 +42,7 @@ public class UserNameMustBeUniqueValidator implements Validator{
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         UIInput usernameComponent = (UIInput) component;
         String username = (String) usernameComponent.getSubmittedValue();
-        if (facadeBean.existsUser(username)) {
+        if (userServiceBean.exists(username)) {
             FacesMessage facesMessage = new FacesMessage(i18n.getString("errors.useralredyexists"));
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(facesMessage);
