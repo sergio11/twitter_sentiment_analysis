@@ -35,5 +35,7 @@ public interface FacadeBeanLocal {
     Boolean existsUser(final String username);
     List<Topic> topicsByUser(final String userName);
     Group getGroupById(final Long id);
+
+    void removeTopic(final Topic topic);
     
 }

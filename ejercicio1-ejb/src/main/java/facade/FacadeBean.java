@@ -130,4 +130,11 @@ public class FacadeBean implements FacadeBeanLocal {
         return groupDAOBean.byId(id);
     }
 
+    @Override
+    public void removeTopic(final Topic topic) {
+        topicDAOBean.remove(topic);
+    }
+    
+    
+
 }

@@ -52,7 +52,14 @@ public class TopicDAOBean implements TopicDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
-    
-    
-    
+
+    @Override
+    public void remove(final Topic topic) {
+        try {
+            em.remove(em.merge(topic));
+        }catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
 }

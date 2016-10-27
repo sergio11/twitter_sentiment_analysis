@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
@@ -23,6 +24,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 @Entity(name = "USERS")
@@ -48,6 +50,8 @@ public class User implements Serializable {
     private Integer mobile;
     @ManyToOne
     private Province province;
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private Set<Topic> topics;
 
     public String getUserName() {
         return userName;
@@ -127,6 +131,14 @@ public class User implements Serializable {
         return name + " " + lastname; 
     }
 
+    public Set<Topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(Set<Topic> topics) {
+        this.topics = topics;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

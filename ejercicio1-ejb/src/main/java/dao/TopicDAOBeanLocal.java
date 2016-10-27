@@ -21,5 +21,7 @@ public interface TopicDAOBeanLocal {
     List<Topic> all();
 
     List<Topic> byUser(final String username);
+
+    void remove(final Topic topic);
     
 }

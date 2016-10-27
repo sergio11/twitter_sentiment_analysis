@@ -15,7 +15,6 @@
                     placeholder="#{i18n['page.results.tags.placeholder']}"
                     value="#{searchTopicBean.topicsSelected}"
                     tags="true"
-                    tiny-screen="full-width"
                     typeahead="true"
                     typeahead-highlight="true"
                     typeahead-limit="10"
@@ -23,7 +22,7 @@
                     onchange="ajax:chartBean.update()"
                     update="@form:results"
                     tooltip="#{i18n['page.results.tags.tooltip']}"
-                    tooltip-position="bottom">
+                    tooltip-position="left">
                     <f:converter converterId="tagsConverter" />
                     <f:facet name="prepend">
                         <b:iconAwesome name="search" />

@@ -41,7 +41,7 @@ public class Topic implements Serializable {
     private String name;
     @OneToMany(cascade = ALL, mappedBy = "topic")
     private List<Tweet> tweets;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private User user;
 
     public Topic(String name) {
@@ -77,5 +77,10 @@ public class Topic implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Topic{" + "id=" + id + ", name=" + name + ", tweets=" + tweets + ", user=" + user + '}';
     }
 }
