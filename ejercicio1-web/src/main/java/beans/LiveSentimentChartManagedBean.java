@@ -5,11 +5,8 @@
  */
 package beans;
 
-import facade.FacadeBeanLocal;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -17,7 +14,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -28,10 +24,9 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
 import javax.jms.Session;
+import javax.jms.Topic;
 import models.Tweet;
-import models.TweetsBySentiment;
 import org.primefaces.model.chart.PieChartModel;
 /**
  *
@@ -40,10 +35,10 @@ import org.primefaces.model.chart.PieChartModel;
 @ManagedBean(name = "liveSentimentChartBean")
 @ViewScoped
 public class LiveSentimentChartManagedBean implements Serializable, MessageListener {
-    @Resource(mappedName = "jms/tweetsProcessedQueueFactory")
+    @Resource(mappedName = "jms/tweetsProcessedTopicFactory")
     private ConnectionFactory queueFactory;
-    @Resource(mappedName = "jms/tweetsProcessedQueue")
-    private Queue tweetsProcessedQueue;
+    @Resource(mappedName = "jms/tweetsProcessedTopic")
+    private Topic tweetsProcessedTopic;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private final Map<String, PieChartModel> liveCharts = new HashMap();
@@ -66,7 +61,7 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
         try {
             qConnection = queueFactory.createConnection();
             Session session = qConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            MessageConsumer consumer = session.createConsumer(tweetsProcessedQueue);
+            MessageConsumer consumer = session.createConsumer(tweetsProcessedTopic);
             consumer.setMessageListener(this);
             qConnection.start();
         } catch (Exception ex) {

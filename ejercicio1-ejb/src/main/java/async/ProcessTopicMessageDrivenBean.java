@@ -16,14 +16,10 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
-import javax.inject.Inject;
-import javax.jms.JMSConnectionFactory;
-import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
 import models.Sentiment;
 import models.Topic;
 import models.Tweet;
@@ -38,11 +34,6 @@ import models.Tweet;
 })
 public class ProcessTopicMessageDrivenBean implements MessageListener {
     
-    @Resource(mappedName = "jms/tweetsProcessedQueue")
-    private Queue tweetsProcessedQueue;
-    @Inject
-    @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
-    private JMSContext context;
     @Resource
     private MessageDrivenContext mdctx;
     @EJB
@@ -51,6 +42,8 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
     @EJB
     private TweetDAOBeanLocal tweetDAOBean;
+    @EJB
+    private TweetsProcessedBeanLocal tweetsProcessedBean;
     
     @Override
     public void onMessage(Message message) {
@@ -66,7 +59,7 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 tweet.setSentiment(sentiment);
                 tweet.setTopic(topic);
                 // enqueue processed tweet
-                enqueueProcessedTweet(tweet);
+                tweetsProcessedBean.enqueueTweet(tweet);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
@@ -77,12 +70,6 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
         }   
-    }
-
-    private void enqueueProcessedTweet(Tweet tweetProcessed) {
-        ObjectMessage message = 
-                  context.createObjectMessage(tweetProcessed);
-        context.createProducer().send(tweetsProcessedQueue, message);
     }
     
 }

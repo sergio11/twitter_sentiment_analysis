@@ -51,8 +51,11 @@
                     <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
                         <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
                             <h:form>
-                                <p:poll interval="3" update="sentimentChart"  />
-                                <p:chart id="sentimentChart" type="pie" model="#{liveSentimentChartBean.liveCharts.get(twitterSearch.text)}" style="width:400px;height:300px"/>
+                                <b:poll interval="3" update="sentimentChart"  />
+                                <p:chart id="sentimentChart"
+                                         type="pie"
+                                         model="#{liveSentimentChartBean.liveCharts.get(twitterSearch.text)}" 
+                                         style="width:400px;height:300px"/>
                             </h:form>
                         </b:panel>
                     </c:if>
