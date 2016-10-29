@@ -15,7 +15,7 @@
     </servlet-mapping>
     <context-param>
         <param-name>BootsFaces_THEME</param-name>
-        <param-value>darkly</param-value>
+        <param-value>cyborg</param-value>
     </context-param>
     <session-config>
         <session-timeout>

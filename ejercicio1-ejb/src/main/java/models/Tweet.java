@@ -122,6 +122,7 @@ public class Tweet implements Serializable{
 
     public void setTopic(Topic topic) {
         this.topic = topic;
+        topic.addTweet(this);
     }
     
     

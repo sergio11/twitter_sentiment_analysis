@@ -49,17 +49,21 @@
                                     action="#{twitterSearch.search}" 
                                     update="@form:results" 
                                     process="searchText" />
+                                
                             </f:facet>
                         </b:inputText>
                     </b:row>
                     <b:row id="results">
                         <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
                             <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                                <b:poll interval="3" update="sentimentChart" />
-                                <p:chart id="sentimentChart"
-                                         type="pie"
-                                         model="#{liveSentimentChartBean.liveCharts.get(twitterSearch.text)}" 
-                                         style="width:400px;height:300px"/>
+                                <p:poll interval="3" update="@parent" />
+                                <b:alert severity="info" rendered="#{not liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">Iniciando análisis espere ...</b:alert>
+                                <b:row rendered="#{liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">
+                                    <p:chart id="sentimentChart"
+                                             type="pie"
+                                             model="#{liveSentimentChartBean.topicsInProgress.get(twitterSearch.text)}" 
+                                             style="width:400px;height:300px"/>
+                                </b:row>
                             </b:panel>
                         </c:if>
                     </b:row>

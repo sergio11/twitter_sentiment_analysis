@@ -62,4 +62,14 @@ public class TopicDAOBean implements TopicDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Integer count() {
+        try {
+            return ((Number)em.createNamedQuery("Topic.count").getSingleResult()).intValue();
+        }catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
 }

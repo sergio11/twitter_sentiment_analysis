@@ -6,6 +6,7 @@
 package async;
 
 import javax.ejb.Local;
+import models.Topic;
 import models.Tweet;
 
 /**
@@ -15,6 +16,12 @@ import models.Tweet;
 @Local
 public interface TweetsProcessedBeanLocal {
 
-    void enqueueTweet(final Tweet tweet);
+    void addProcessedTweet(final Tweet tweet);
+
+    void finishTopicAnalysis(final Topic topic);
+
+    void topicAnalysisError(final Topic topic);
+
+    void startTopicAnalysis(final Topic topic);
     
 }

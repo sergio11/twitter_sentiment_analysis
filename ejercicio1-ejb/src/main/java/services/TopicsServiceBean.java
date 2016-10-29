@@ -57,4 +57,11 @@ public class TopicsServiceBean implements TopicsServiceBeanLocal {
                   context.createObjectMessage(topic);
         context.createProducer().send(topicsQueue, message);
     }
+
+    @Override
+    public Integer getTopicsCount() {
+        return topicDAOBean.count();
+    }
+    
+    
 }

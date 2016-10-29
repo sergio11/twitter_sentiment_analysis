@@ -26,8 +26,11 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.Topic;
-import models.Tweet;
-import org.primefaces.model.chart.PieChartModel;
+import mapper.ProgressTopicDataMapper;
+import models.ProgressTopic;
+import models.messages.FinishTopicAnalysisMessage;
+import models.messages.StartTopicAnalysisMessage;
+import models.messages.TweetProcessedMessage;
 /**
  *
  * @author sergio
@@ -41,7 +44,8 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
     private Topic tweetsProcessedTopic;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
-    private final Map<String, PieChartModel> liveCharts = new HashMap();
+    private final ProgressTopicDataMapper progressTopicDataMapper = new ProgressTopicDataMapper();
+    private final Map<String, ProgressTopic> topicsInProgress = new HashMap();
     Connection qConnection;
 
     public ResourceBundle getI18n() {
@@ -52,8 +56,8 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
         this.i18n = i18n;
     }
 
-    public Map<String, PieChartModel> getLiveCharts() {
-        return liveCharts;
+    public Map<String, ProgressTopic> getTopicsInProgress() {
+        return topicsInProgress;
     }
     
     @PostConstruct
@@ -79,36 +83,37 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
             }
         }
     }
-    
-    public void createChart(String topic){
-        PieChartModel pieChart = new PieChartModel();
-        pieChart.setTitle("Custom Pie");
-        pieChart.setLegendPosition("e");
-        pieChart.setFill(false);
-        pieChart.setShowDataLabels(true);
-        pieChart.setDiameter(150);
-        liveCharts.put(topic, pieChart);
-        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "Topic: " + topic);
-    }
 
     @Override
     public void onMessage(Message message) {
         try {
-            ObjectMessage msg = (ObjectMessage) message;
-            Tweet tweetProcessed = (Tweet) msg.getObject();
-            PieChartModel chart =  liveCharts != null ? liveCharts.get(tweetProcessed.getTopic().getName()) : null;
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
-            if(chart != null){
-                String label = tweetProcessed.getSentiment().name();
-                Map<String, Number> data = chart.getData();
-                data.put(label, data.get(label).intValue() + 1);
-                chart.setData(data);
+            Object msg = ((ObjectMessage) message).getObject();
+            if (msg instanceof StartTopicAnalysisMessage) {
+                StartTopicAnalysisMessage startTopicAnalysis = (StartTopicAnalysisMessage)msg;
+                Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Iniciándo análisis para el topic: " + startTopicAnalysis.getTopic().getName());
+                ProgressTopic progressTopic = progressTopicDataMapper.transform(startTopicAnalysis.getTopic());
+                topicsInProgress.put(startTopicAnalysis.getTopic().getName(), progressTopic);
+            } else if (msg instanceof TweetProcessedMessage) {
+                TweetProcessedMessage tweetProcessed = (TweetProcessedMessage)msg;
+                ProgressTopic progressTopic = topicsInProgress != null ? topicsInProgress.get(tweetProcessed.getTopic()) : null;
+                Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
+                if (progressTopic != null) {
+                    progressTopic.setTweets(progressTopic.getTweets()+1);
+                    String label = tweetProcessed.getSentiment();
+                    Map<String, Number> data = progressTopic.getChart().getData();
+                    data.put(label, data.get(label).intValue() + 1);
+                    progressTopic.getChart().setData(data);
+                }
+                Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + tweetProcessed.getSentiment());
+            } else if(msg instanceof FinishTopicAnalysisMessage){
+                FinishTopicAnalysisMessage finishMessage = (FinishTopicAnalysisMessage)msg;
+                Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Finalizando análsis para el topic: " + finishMessage.getTopic());
+                ProgressTopic progressTopic = topicsInProgress != null ? topicsInProgress.get(finishMessage.getTopic()) : null;
+                progressTopic.setIsFinished(Boolean.TRUE);
             }
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + tweetProcessed.getText());
+            
         } catch (JMSException ex) {
             Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
 }

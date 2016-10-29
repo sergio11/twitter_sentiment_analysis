@@ -23,5 +23,7 @@ public interface TopicDAOBeanLocal {
     List<Topic> byUser(final String username);
 
     void remove(final Topic topic);
+
+    Integer count();
     
 }

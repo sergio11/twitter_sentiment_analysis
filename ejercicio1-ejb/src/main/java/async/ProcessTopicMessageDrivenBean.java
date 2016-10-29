@@ -47,9 +47,12 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     
     @Override
     public void onMessage(Message message) {
+        
         try {
             ObjectMessage objectMessage = (ObjectMessage) message;
             Topic topic = (Topic) objectMessage.getObject();
+            // send start analysis
+            tweetsProcessedBean.startTopicAnalysis(topic);
             Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.INFO, "Analizando término: " + topic.getName());
             // search tweets for topic
             List<Tweet> tweets = twitterSearchBean.search(topic.getName());
@@ -58,8 +61,8 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 Sentiment sentiment = sentimentAnalyzerBean.findSentiment(tweet.getText());
                 tweet.setSentiment(sentiment);
                 tweet.setTopic(topic);
-                // enqueue processed tweet
-                tweetsProcessedBean.enqueueTweet(tweet);
+                // send tweet processed
+                tweetsProcessedBean.addProcessedTweet(tweet);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
@@ -67,6 +70,7 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 }
             }
             tweetDAOBean.persist(tweets);
+            tweetsProcessedBean.finishTopicAnalysis(topic);
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
         }   

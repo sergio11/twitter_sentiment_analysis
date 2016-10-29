@@ -23,5 +23,7 @@ public interface TopicsServiceBeanLocal {
     void remove(final Topic topic);
 
     void analyzeTopic(final Topic topic);
+
+    Integer getTopicsCount();
     
 }

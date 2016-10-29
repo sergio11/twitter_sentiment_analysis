@@ -5,6 +5,7 @@
  */
 package async;
 
+import java.io.Serializable;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -15,24 +16,50 @@ import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Topic;
 import models.Tweet;
+import models.messages.TweetProcessedMessage;
+import models.messages.FinishTopicAnalysisMessage;
+import models.messages.StartTopicAnalysisMessage;
+import models.messages.TopicAnalysisErrorMessage;
 
 /**
  *
  * @author sergio
  */
 @Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class TweetsProcessedBean implements TweetsProcessedBeanLocal {
     @Resource(mappedName = "jms/tweetsProcessedTopic")
     private Topic tweetsProcessedTopic;
     @Inject
     @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
     private JMSContext context;
+    
+    private void sendMessage(final Serializable data){
+        ObjectMessage message = context.createObjectMessage(data);
+        context.createProducer().send(tweetsProcessedTopic, message);
+    }
+    
+    @Override
+    public void startTopicAnalysis(final models.Topic topic) {
+        StartTopicAnalysisMessage startTopicAnalysisMessage = new StartTopicAnalysisMessage(topic);
+        sendMessage(startTopicAnalysisMessage);
+    }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void enqueueTweet(final Tweet tweet) {
-        ObjectMessage message = 
-                  context.createObjectMessage(tweet);
-        context.createProducer().send(tweetsProcessedTopic, message);
+    public void addProcessedTweet(final Tweet tweet) {
+        TweetProcessedMessage tweetProcessed = new TweetProcessedMessage(tweet.getTopic().getName(), tweet.getSentiment().name());
+        sendMessage(tweetProcessed);
+    }
+
+    @Override
+    public void finishTopicAnalysis(final models.Topic topic) {
+        FinishTopicAnalysisMessage ftam = new FinishTopicAnalysisMessage(topic.getName(), topic.getTweets().size());
+        sendMessage(ftam);
+    }
+
+    @Override
+    public void topicAnalysisError(final models.Topic topic) {
+        TopicAnalysisErrorMessage taem = new TopicAnalysisErrorMessage(topic.getName());
+        sendMessage(taem);
     }
 }

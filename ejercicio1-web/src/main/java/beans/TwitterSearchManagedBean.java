@@ -32,19 +32,9 @@ import services.TopicsServiceBeanLocal;
 public class TwitterSearchManagedBean implements Serializable {
     @EJB
     private TopicsServiceBeanLocal topicsServiceBean;
-    @ManagedProperty("#{liveSentimentChartBean}")
-    private LiveSentimentChartManagedBean liveSentimentChartBean;
     private String text;
     private List<Tweet> result;
     private User currentUser;
-
-    public LiveSentimentChartManagedBean getLiveSentimentChartBean() {
-        return liveSentimentChartBean;
-    }
-
-    public void setLiveSentimentChartBean(LiveSentimentChartManagedBean liveSentimentChartBean) {
-        this.liveSentimentChartBean = liveSentimentChartBean;
-    }
 
     public String getText() {
         return text;
@@ -77,8 +67,6 @@ public class TwitterSearchManagedBean implements Serializable {
             topic.setUser(currentUser);
             // analyze topic
             topicsServiceBean.analyzeTopic(topic);
-            // create live chart for topic
-            liveSentimentChartBean.createChart(text);
             // add confirmation message
             FacesMessage message = new FacesMessage();
             message.setSeverity(FacesMessage.SEVERITY_INFO);
