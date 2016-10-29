@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package async;
+package mdb;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -35,6 +37,7 @@ public class TweetsProcessedBean implements TweetsProcessedBeanLocal {
     private JMSContext context;
     
     private void sendMessage(final Serializable data){
+        Logger.getLogger(TweetsProcessedBean.class.getName()).log(Level.INFO, "PUBLICANDO MENSAJE ...");
         ObjectMessage message = context.createObjectMessage(data);
         context.createProducer().send(tweetsProcessedTopic, message);
     }

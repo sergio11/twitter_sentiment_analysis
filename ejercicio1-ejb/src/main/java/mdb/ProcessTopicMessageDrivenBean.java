@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package async;
+package mdb;
 
 import search.TwitterSearchBeanLocal;
 import analyzer.SentimentAnalyzerBeanLocal;

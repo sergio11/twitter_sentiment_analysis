@@ -6,13 +6,15 @@
 package models.messages;
 
 import java.io.Serializable;
+import utils.IVisitable;
+import visitor.IProcessMessageVisitor;
 
 
 /**
  *
  * @author sergio
  */
-public class TweetProcessedMessage implements Serializable{
+public class TweetProcessedMessage implements Serializable, IVisitable<IProcessMessageVisitor>{
     private String topic;
     private String sentiment;
 
@@ -41,6 +43,9 @@ public class TweetProcessedMessage implements Serializable{
     public String toString() {
         return "TweetProcessedMessage{" + "topic=" + topic + ", sentiment=" + sentiment + '}';
     }
-    
-    
+
+    @Override
+    public void accept(IProcessMessageVisitor visitor) {
+        visitor.visit(this);
+    }
 }

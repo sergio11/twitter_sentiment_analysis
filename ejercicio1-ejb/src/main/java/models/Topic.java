@@ -7,6 +7,7 @@ package models;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -39,7 +40,7 @@ public class Topic implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(cascade = ALL, mappedBy = "topic")
+    @OneToMany(cascade={CascadeType.ALL})
     private List<Tweet> tweets;
     @ManyToOne
     private User user;

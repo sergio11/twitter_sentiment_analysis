@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
@@ -57,9 +56,11 @@ public class Tweet implements Serializable{
     private String text;
     private Sentiment sentiment;
     @ManyToOne
-    @JoinColumn(name="topic_id", nullable=false)
     private Topic topic;
 
+    public Long getId() {
+        return id;
+    }
     public Date getCreateAt() {
         return createAt;
     }
@@ -124,7 +125,4 @@ public class Tweet implements Serializable{
         this.topic = topic;
         topic.addTweet(this);
     }
-    
-    
-    
 }

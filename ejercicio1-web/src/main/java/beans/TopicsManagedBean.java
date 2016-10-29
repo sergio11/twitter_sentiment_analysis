@@ -30,6 +30,7 @@ public class TopicsManagedBean {
     private TopicsServiceBeanLocal topicsServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
+    private User currentUser;
     private List<Topic> topics;
     private Topic topicToDelete;
    
@@ -43,6 +44,8 @@ public class TopicsManagedBean {
     }
 
     public List<Topic> getTopics() {
+         // load topics for this user
+        topics = topicsServiceBean.getTopicsByUser(currentUser.getUserName());
         return topics;
     }
 
@@ -62,9 +65,7 @@ public class TopicsManagedBean {
     protected void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
-        User currentUser = (User) externalContext.getSessionMap().get("user");
-        // load topics for this user
-        topics = topicsServiceBean.getTopicsByUser(currentUser.getUserName());
+        currentUser = (User) externalContext.getSessionMap().get("user");
     }
     
     public void confirmDelete(Topic t){

@@ -6,13 +6,15 @@
 package models.messages;
 
 import java.io.Serializable;
+import utils.IVisitable;
+import visitor.IProcessMessageVisitor;
 
 /**
  *
  * @author sergio
  */
-    public class FinishTopicAnalysisMessage implements Serializable{
-    
+public class FinishTopicAnalysisMessage implements Serializable, IVisitable<IProcessMessageVisitor> {
+
     private String topic;
     private Integer tweetsCount;
 
@@ -41,6 +43,9 @@ import java.io.Serializable;
     public String toString() {
         return "FinishTopicAnalysisMessage{" + "topic=" + topic + ", tweetsCount=" + tweetsCount + '}';
     }
-    
-    
+
+    @Override
+    public void accept(IProcessMessageVisitor visitor) {
+        visitor.visit(this);
+    }
 }

@@ -7,12 +7,14 @@ package models.messages;
 
 import java.io.Serializable;
 import models.Topic;
+import utils.IVisitable;
+import visitor.IProcessMessageVisitor;
 
 /**
  *
  * @author sergio
  */
-public class StartTopicAnalysisMessage implements Serializable{
+public class StartTopicAnalysisMessage implements Serializable, IVisitable<IProcessMessageVisitor>{
     
     private Topic topic;
 
@@ -26,6 +28,11 @@ public class StartTopicAnalysisMessage implements Serializable{
 
     public void setTopic(Topic topic) {
         this.topic = topic;
+    }
+
+    @Override
+    public void accept(IProcessMessageVisitor visitor) {
+        visitor.visit(this);
     }
     
     
