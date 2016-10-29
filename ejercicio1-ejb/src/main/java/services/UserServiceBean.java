@@ -55,7 +55,7 @@ public class UserServiceBean implements UserServiceBeanLocal {
     }
 
     @Override
-    public Group getGroupById(final Long id) {
-        return groupDAOBean.byId(id);
+    public Group getGroupByName(final String name) {
+        return groupDAOBean.byName(name);
     }
 }

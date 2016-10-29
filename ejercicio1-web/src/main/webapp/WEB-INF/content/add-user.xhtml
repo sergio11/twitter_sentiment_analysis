@@ -122,9 +122,9 @@
                     <b:row>
                         <b:column col-md="12">
                             <h:outputLabel value="#{i18n['form.create.group.label']}" for="groups" />
-                            <h:selectOneRadio value="#{usersBean.userToCreate.group}" id="groups" required="true" converter="#{groupConverter}">
+                            <h:selectManyCheckbox value="#{usersBean.userToCreate.groups}" id="groups" required="true" converter="#{groupConverter}">
                                 <f:selectItems value="#{usersBean.groups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
-                            </h:selectOneRadio>
+                            </h:selectManyCheckbox>
                         </b:column>
                     </b:row>
                     <u:doublePassword value="#{usersBean.userToCreate.password}">

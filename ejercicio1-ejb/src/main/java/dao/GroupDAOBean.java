@@ -33,9 +33,9 @@ public class GroupDAOBean implements GroupDAOBeanLocal {
     }
 
     @Override
-    public Group byId(final Long id) {
+    public Group byName(final String name) {
         try {
-            return em.find(Group.class, id);
+            return em.find(Group.class, name);
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);

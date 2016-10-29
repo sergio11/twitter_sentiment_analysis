@@ -18,6 +18,6 @@ public interface GroupDAOBeanLocal {
 
     List<Group> all();
 
-    Group byId(final Long id);
+    Group byName(final String name);
     
 }

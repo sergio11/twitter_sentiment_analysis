@@ -23,7 +23,6 @@ public interface UserServiceBeanLocal {
     User find(final String username);
     Boolean exists(final String username);
     List<Group> getAllGroups();
-
-    Group getGroupById(final Long id);
+    Group getGroupByName(final String name);
     
 }

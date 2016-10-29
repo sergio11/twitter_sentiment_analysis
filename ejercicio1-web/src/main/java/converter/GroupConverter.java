@@ -46,7 +46,7 @@ public class GroupConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         try{
-            return userServiceBean.getGroupById(Long.valueOf(value));
+            return userServiceBean.getGroupByName(value);
         }catch(EJBException e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new ConverterException(new FacesMessage(i18n.getString("errors.converter.group")));
