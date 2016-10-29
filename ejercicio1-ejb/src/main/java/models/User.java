@@ -19,12 +19,13 @@ import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 @Entity(name = "USERS")
@@ -40,8 +41,6 @@ public class User implements Serializable {
     private String userName;
     @Column(name = "PASSWD", length = 32,columnDefinition = "VARCHAR(32)")
     private String password;
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private Group group;
     private String name;
     private String lastname;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -50,8 +49,14 @@ public class User implements Serializable {
     private Integer mobile;
     @ManyToOne
     private Province province;
-    @OneToMany(cascade = CascadeType.REMOVE)
-    private Set<Topic> topics;
+    @ManyToMany(cascade={CascadeType.ALL})
+    @JoinTable(
+            name="USER_GROUPS",
+            joinColumns={ @JoinColumn(name="USER_NAME") },
+            inverseJoinColumns={ @JoinColumn(name="GROUP_NAME") }
+    )
+    private Set<Group> groups;
+    
 
     public String getUserName() {
         return userName;
@@ -69,14 +74,12 @@ public class User implements Serializable {
         this.password = hashPassword(password);
     }
 
-
-    public Group getGroup() {
-        return group;
+    public Set<Group> getGroups() {
+        return groups;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-        group.addUser(this);
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     public String getName() {
@@ -131,13 +134,6 @@ public class User implements Serializable {
         return name + " " + lastname; 
     }
 
-    public Set<Topic> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(Set<Topic> topics) {
-        this.topics = topics;
-    }
     
     @Override
     public boolean equals(Object obj) {

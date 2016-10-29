@@ -7,7 +7,6 @@ package models;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.CascadeType;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.Id;

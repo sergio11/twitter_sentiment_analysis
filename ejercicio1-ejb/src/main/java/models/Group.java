@@ -8,13 +8,12 @@ package models;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,20 +27,11 @@ public class Group implements Serializable{
     
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "name", length = 20)
     private String name;
     private String description;
-    @OneToMany
+    @ManyToMany(mappedBy="groups")
     private Set<User> users;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -78,7 +68,7 @@ public class Group implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -91,15 +81,14 @@ public class Group implements Serializable{
             return false;
         }
         final Group other = (Group) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         return true;
     }
-    
-   
+
     @Override
     public String toString() {
-        return "Group{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
+        return "Group{" + "name=" + name + ", description=" + description + ", users=" + users + '}';
     }
 }

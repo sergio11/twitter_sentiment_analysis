@@ -56,7 +56,7 @@ public class GroupConverter implements Converter {
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value instanceof Group){
-            return ((Group)value).getId().toString();
+            return ((Group)value).getName();
         }
         return null;
     }
