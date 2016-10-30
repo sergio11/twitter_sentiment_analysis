@@ -62,6 +62,4 @@ public class TopicsServiceBean implements TopicsServiceBeanLocal {
     public Integer getTopicsCount() {
         return topicDAOBean.count();
     }
-    
-    
 }

@@ -30,7 +30,9 @@
                                 tooltip-position="right" />
                         </b:row>
                         <b:fetchBeanInfos />
-                        <b:commandButton look="success" size="lg" value="#{i18n['form.login.submit']}" action="#{authBean.login()}" iconAwesome="send"/>
+                        <b:row>
+                            <b:commandButton look="success" col-md="12" value="#{i18n['form.login.submit']}" action="#{authBean.login()}" iconAwesome="send"/>
+                        </b:row>
                     </h:form>
                 </b:column>
             </b:row>

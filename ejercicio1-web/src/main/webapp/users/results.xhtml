@@ -5,11 +5,14 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <h:form>
+        <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
+            <p><strong>#{i18n['page.results.notresults.title']}</strong></p>
+            <h:outputText value="#{i18n['page.results.notresults.text']}" />
+        </b:alert>
+        <h:form rendered="#{topicsManagedBean.totalTopics lt 0}">
             <b:row>
                 <b:inputText 
                     placeholder="#{i18n['page.results.tags.placeholder']}"
@@ -29,22 +32,20 @@
                     </f:facet> 
                 </b:inputText>
             </b:row>
-            <b:row id="results">
+            <b:row  id="results" style="margin-top: 1rem">
                 <b:messages />
-                <c:if test="${not empty searchTopicBean.topicsSelected}">
+                <b:panelGrid rendered="${not empty searchTopicBean.topicsSelected}" colSpans="6,6" size="md">
                     <ui:repeat var="topic" value="#{searchTopicBean.topicsSelected}">
-                        <b:panel  title="Result for topic #{topic}" collapsible="false" look="info" col-md="6">
+                        <b:panel span="6" title="Result for topic #{topic}" collapsible="false" look="info">
                             <b:row>
-                                <b:column col-md="6">
-                                    <p:chart type="donut" model="#{chartBean.donutCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
-                                </b:column>
-                                <b:column col-md="6">
-                                    <p:chart type="pie" model="#{chartBean.pieCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
-                                </b:column>
+                                <p:chart type="donut" model="#{chartBean.donutCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
+                            </b:row>
+                            <b:row>
+                                <p:chart type="pie" model="#{chartBean.pieCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
                             </b:row>
                         </b:panel>
                     </ui:repeat>
-                </c:if>
+                </b:panelGrid>
             </b:row>
         </h:form>
     </ui:define>

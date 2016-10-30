@@ -32,6 +32,7 @@ public class TopicsManagedBean {
     private ResourceBundle i18n;
     private User currentUser;
     private List<Topic> topics;
+    private Integer totalTopics;
     private Topic topicToDelete;
    
 
@@ -53,6 +54,11 @@ public class TopicsManagedBean {
         this.topics = topics;
     }
 
+    public Integer getTotalTopics() {
+        totalTopics = topicsServiceBean.getTopicsCount();
+        return totalTopics;
+    }
+   
     public Topic getTopicToDelete() {
         return topicToDelete;
     }
