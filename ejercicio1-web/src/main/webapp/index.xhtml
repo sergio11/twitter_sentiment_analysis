@@ -2,7 +2,8 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:b="http://bootsfaces.net/ui"
-                template="/WEB-INF/templates/app_template.xhtml">
+                template="/WEB-INF/templates/app_template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:define name="content">
         <b:jumbotron>
@@ -10,5 +11,19 @@
             <p>Crear una aplicación que utilice todas las etiquetas de la librería html.</p>
             <p><b:button look="primary" size="lg" outcome="login" value="Login" /></p>
         </b:jumbotron>
+        <b:row>
+            <b:column col-md="4">
+                <h3>#{i18n['page.home.analysis.title']}</h3>
+                <h:outputText value="#{i18n['page.home.analysis.text']}" />
+            </b:column>
+            <b:column col-md="4">
+                <h3>#{i18n['page.home.results.title']}</h3>
+                <h:outputText value="#{i18n['page.home.results.text']}" />
+            </b:column>
+            <b:column col-md="4">
+                <h3>#{i18n['page.home.users.title']}</h3>
+                <h:outputText value="#{i18n['page.home.users.text']}" />
+            </b:column>
+        </b:row>
     </ui:define>
 </ui:composition>
