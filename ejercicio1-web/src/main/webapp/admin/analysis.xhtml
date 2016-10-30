@@ -5,7 +5,6 @@
                 template="/WEB-INF/templates/app_template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pass="http://xmlns.jcp.org/jsf/passthrough">
 
@@ -30,13 +29,15 @@
                         <b:dataTableColumn label="#{i18n['datatable.topics.tweets.label']}" value="#{topic.tweets.size()}" />
                         <b:dataTableColumn label="#{i18n['datatable.topics.actions.label']}" orderable="false">
                             <b:buttonGroup>
-                                <b:commandButton value="#{i18n['datatable.topics.actions.label']}" look="danger" pass:data-target="#deleteTopicModal" pass:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{topicsManagedBean.confirmDelete(topic)}" update=":deleteTopicModal:content"/>
+                                <b:commandButton value="#{i18n['datatable.topics.actions.remove.label']}" look="danger" pass:data-target="#deleteTopicModal" pass:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{topicsManagedBean.confirmDelete(topic)}" update=":deleteTopicModal:content"/>
                             </b:buttonGroup>
                         </b:dataTableColumn>
                     </b:dataTable>
                 </b:tab>
                 <b:tab title="#{i18n['page.topics.tabs.analyze']}">
-                    <f:facet name="anchor"><b:iconAwesome name="cog" spin="true" /></f:facet>
+                    <f:facet name="anchor">
+                        <b:iconAwesome name="cog" spin="true" />
+                    </f:facet>
                     <b:row>
                         <b:inputText id="searchText" col-md="6" offset-md="3" placeholder="Type something here..." value="#{twitterSearch.text}">
                             <f:facet name="prepend">
@@ -47,25 +48,23 @@
                                     value="Search" 
                                     look="success"
                                     action="#{twitterSearch.search}" 
-                                    update="@form:results" 
+                                    update=":analysis:**:results" 
                                     process="searchText" />
                                 
                             </f:facet>
                         </b:inputText>
                     </b:row>
-                    <b:row id="results">
-                        <c:if test="${not empty twitterSearch.text or not empty twitterSearch.result }">
-                            <b:panel  title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                                <p:poll interval="3" update="@parent" />
-                                <b:alert severity="info" rendered="#{not liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">Iniciando análisis espere ...</b:alert>
-                                <b:row rendered="#{liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">
-                                    <p:chart id="sentimentChart"
-                                             type="pie"
-                                             model="#{liveSentimentChartBean.topicsInProgress.get(twitterSearch.text)}" 
-                                             style="width:400px;height:300px"/>
-                                </b:row>
-                            </b:panel>
-                        </c:if>
+                    <b:row id="results" rendered="${not empty twitterSearch.text or not empty twitterSearch.result }">
+                        <b:poll interval="3" update="@next" />
+                        <b:panel title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
+                            <b:alert severity="info" rendered="#{not liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">Iniciando análisis espere ...</b:alert>
+                            <b:row rendered="#{liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">
+                                <p:chart id="sentimentChart"
+                                         type="pie"
+                                         model="#{liveSentimentChartBean.topicsInProgress.get(twitterSearch.text).chart}" 
+                                         style="width:400px;height:300px"/>
+                            </b:row>
+                        </b:panel>
                     </b:row>
                 </b:tab>
             </b:tabView>

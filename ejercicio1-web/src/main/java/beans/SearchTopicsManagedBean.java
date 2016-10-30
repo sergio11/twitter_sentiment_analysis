@@ -9,6 +9,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -55,6 +57,7 @@ public class SearchTopicsManagedBean implements Serializable {
     }
 
     public void setTopicsSelected(List<String> topicsSelected) {
+        Logger.getLogger(SearchTopicsManagedBean.class.getName()).log(Level.INFO, "Topics Selected : " + topicsSelected.size());
         this.topicsSelected = topicsSelected;
     }
 

@@ -6,10 +6,11 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
-import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -40,7 +43,9 @@ public class Topic implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(cascade={CascadeType.ALL})
+    @Temporal(TemporalType.DATE)
+    private Date createAt = new Date();
+    @OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="topic")
     private List<Tweet> tweets;
     @ManyToOne
     private User user;
@@ -64,6 +69,14 @@ public class Topic implements Serializable {
         this.name = name;
     }
 
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+    
     public List<Tweet> getTweets() {
         return tweets;
     }

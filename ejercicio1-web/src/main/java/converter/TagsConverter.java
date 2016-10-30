@@ -6,8 +6,11 @@
 package converter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIComponent;
@@ -33,16 +36,16 @@ public class TagsConverter implements Converter {
             FacesMessage message = new FacesMessage(i18n.getString("page.results.errors.tags"));
             throw new ConverterException(message);
         }
-
-        String[] terms = value.trim().split(",");
-        if (terms.length == 0) {
-            FacesMessage message = new FacesMessage(i18n.getString("page.results.errors.tags"));
-            throw new ConverterException(message);
-        }
         
-        List<String> topicsSelected = new ArrayList();
-        for(int i = 0, len = terms.length; i < len; i++){
-            topicsSelected.add(terms[i]);
+        List<String> topicsSelected;
+        if(value.length() > 0){
+            topicsSelected = new ArrayList();
+            String[] terms = value.trim().split(",");
+            for(int i = 0, len = terms.length; i < len; i++){
+                topicsSelected.add(terms[i]);
+            }
+        }else{
+            topicsSelected = Collections.emptyList();
         }
         return topicsSelected;
     }

@@ -9,10 +9,10 @@
 
     <ui:define name="content">
         <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
-            <p><strong>#{i18n['page.results.notresults.title']}</strong></p>
+            <h:outputText value="#{i18n['page.results.notresults.title']}" />
             <h:outputText value="#{i18n['page.results.notresults.text']}" />
         </b:alert>
-        <h:form rendered="#{topicsManagedBean.totalTopics lt 0}">
+        <h:form rendered="#{topicsManagedBean.totalTopics gt 0}">
             <b:row>
                 <b:inputText 
                     placeholder="#{i18n['page.results.tags.placeholder']}"
@@ -23,7 +23,7 @@
                     typeahead-limit="10"
                     typeahead-values="#{searchTopicBean.topicsCSV}"
                     onchange="ajax:chartBean.update()"
-                    update="@form:results"
+                    update="@form:topicsResults"
                     tooltip="#{i18n['page.results.tags.tooltip']}"
                     tooltip-position="left">
                     <f:converter converterId="tagsConverter" />
@@ -32,9 +32,9 @@
                     </f:facet> 
                 </b:inputText>
             </b:row>
-            <b:row  id="results" style="margin-top: 1rem">
+            <b:row  id="topicsResults">
                 <b:messages />
-                <b:panelGrid rendered="${not empty searchTopicBean.topicsSelected}" colSpans="6,6" size="md">
+                <b:panelGrid colSpans="6,6" size="md" rendered="${not empty searchTopicBean.topicsSelected}" style="margin-top: 1rem">
                     <ui:repeat var="topic" value="#{searchTopicBean.topicsSelected}">
                         <b:panel span="6" title="Result for topic #{topic}" collapsible="false" look="info">
                             <b:row>

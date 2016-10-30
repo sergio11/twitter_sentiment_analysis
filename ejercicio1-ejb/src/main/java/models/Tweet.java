@@ -10,9 +10,11 @@ import java.util.Date;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
@@ -39,7 +41,7 @@ import javax.persistence.Temporal;
 )
 @NamedNativeQuery(
     name = "TweetsBySentiment",
-    query = "SELECT sentiment, COUNT(*) AS tweets from tweets A JOIN topics B ON(A.topic_id=B.id) WHERE LOWER(B.name) = ?1 GROUP BY A.SENTIMENT",
+    query = "SELECT sentiment, COUNT(*) AS tweets from tweets A JOIN topics B ON(A.id_topic=B.id) WHERE LOWER(B.name) = ?1 GROUP BY A.SENTIMENT",
     resultSetMapping = "TweetsBySentimentResult"
 )
 public class Tweet implements Serializable{
@@ -55,7 +57,8 @@ public class Tweet implements Serializable{
     private Integer reTweetCount;
     private String text;
     private Sentiment sentiment;
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ID_TOPIC")
     private Topic topic;
 
     public Long getId() {

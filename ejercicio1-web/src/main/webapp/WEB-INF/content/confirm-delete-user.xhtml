@@ -12,7 +12,7 @@
         <f:facet name="footer">
             <h:form>
                 <b:button value="#{i18n['form.remove.cancel']}" dismiss="modal"/>
-                <b:commandButton look="danger" value="#{i18n['form.remove.submit']}" action="${usersBean.delete()}"  ajax="true" update=":analysis:**:topicsTab"/>
+                <b:commandButton look="danger" value="#{i18n['form.remove.submit']}" action="${usersBean.delete()}"  ajax="true" update=":users"/>
             </h:form>
         </f:facet>
     </b:modal>
