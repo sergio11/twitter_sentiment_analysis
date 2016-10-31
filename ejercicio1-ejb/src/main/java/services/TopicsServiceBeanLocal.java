@@ -25,5 +25,7 @@ public interface TopicsServiceBeanLocal {
     void analyzeTopic(final Topic topic);
 
     Integer getTopicsCount();
+
+    List<Topic> getRecentTopics(final Integer count);
     
 }

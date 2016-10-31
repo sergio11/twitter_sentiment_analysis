@@ -62,4 +62,9 @@ public class TopicsServiceBean implements TopicsServiceBeanLocal {
     public Integer getTopicsCount() {
         return topicDAOBean.count();
     }
+
+    @Override
+    public List<Topic> getRecentTopics(final Integer count) {
+        return topicDAOBean.recent(count);
+    }
 }

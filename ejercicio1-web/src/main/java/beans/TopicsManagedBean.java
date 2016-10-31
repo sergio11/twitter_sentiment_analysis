@@ -26,12 +26,14 @@ import services.TopicsServiceBeanLocal;
 @ManagedBean(name = "topicsManagedBean")
 @ViewScoped
 public class TopicsManagedBean {
+    private final static Integer MAX_RECENT_TOPICS_TO_SHOW = 5;
     @EJB
     private TopicsServiceBeanLocal topicsServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     private User currentUser;
     private List<Topic> topics;
+    private List<Topic> recentTopics;
     private Integer totalTopics;
     private Topic topicToDelete;
    
@@ -54,6 +56,11 @@ public class TopicsManagedBean {
         this.topics = topics;
     }
 
+    public List<Topic> getRecentTopics() {
+        recentTopics = topicsServiceBean.getRecentTopics(MAX_RECENT_TOPICS_TO_SHOW);
+        return recentTopics;
+    }
+    
     public Integer getTotalTopics() {
         totalTopics = topicsServiceBean.getTopicsCount();
         return totalTopics;

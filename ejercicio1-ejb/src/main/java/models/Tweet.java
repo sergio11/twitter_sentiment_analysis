@@ -17,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,6 +45,9 @@ import javax.persistence.Temporal;
     name = "TweetsBySentiment",
     query = "SELECT sentiment, COUNT(*) AS tweets from tweets A JOIN topics B ON(A.id_topic=B.id) WHERE LOWER(B.name) = ?1 GROUP BY A.SENTIMENT",
     resultSetMapping = "TweetsBySentimentResult"
+)
+@NamedQueries(
+        @NamedQuery(name="Tweets.byTopic", query="SELECT t FROM Tweet t WHERE t.topic.name = :topic")
 )
 public class Tweet implements Serializable{
     

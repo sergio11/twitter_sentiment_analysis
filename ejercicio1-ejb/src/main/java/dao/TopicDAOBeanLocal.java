@@ -25,5 +25,7 @@ public interface TopicDAOBeanLocal {
     void remove(final Topic topic);
 
     Integer count();
+
+    List<Topic> recent(final Integer count);
     
 }

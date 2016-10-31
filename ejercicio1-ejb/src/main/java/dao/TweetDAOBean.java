@@ -56,7 +56,24 @@ public class TweetDAOBean implements TweetDAOBeanLocal {
             throw new RuntimeException(e);
         }
     }
-    
-    
-    
+
+    @Override
+    public List<Tweet> byTopic(final String topic) {
+        try{
+            return em.createNamedQuery("Tweets.byTopic").setParameter("topic", topic).getResultList();
+        }catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Tweet> byTopic(final String topic, final Integer count) {
+        try{
+            return em.createNamedQuery("Tweets.byTopic").setParameter("topic", topic).setMaxResults(count).getResultList();
+        }catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
 }

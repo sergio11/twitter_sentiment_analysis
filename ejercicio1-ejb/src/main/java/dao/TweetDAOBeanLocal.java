@@ -19,7 +19,8 @@ public interface TweetDAOBeanLocal {
 
     void persist(final Tweet tweet);
     void persist(List<Tweet> tweets);
-
     List<TweetsBySentiment> groupedBySentiment(final String topic);
-    
+    List<Tweet> byTopic(final String topic);
+
+    List<Tweet> byTopic(final String topic, final Integer count);
 }

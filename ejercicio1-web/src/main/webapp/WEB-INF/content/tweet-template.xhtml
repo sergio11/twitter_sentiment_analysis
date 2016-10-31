@@ -1,0 +1,39 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:b="http://bootsfaces.net/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <b:well>
+        <b:row>
+            <h:outputFormat value="#{i18n['page.topics.rewtweets']}">
+                <f:param value="#{tweet.reTweetCount}"/>
+            </h:outputFormat>
+        </b:row>
+        <b:row>
+            <h:outputText value="#{tweet.text}" />
+        </b:row>
+        <b:row>
+            <c:choose>
+                <c:when test="${tweet.sentiment == 'VERY_NEGATIVE' or tweet.sentiment == 'NEGATIVE'}">
+                    <b:label text="#{tweet.sentiment}" severity="danger"/>
+                </c:when>
+                <c:when test="${tweet.sentiment == 'NEUTRO'}">
+                    <b:label text="#{tweet.sentiment}" severity="warning"/>
+                </c:when>
+                <c:when test="${tweet.sentiment == 'POSITIVE' or tweet.sentiment == 'VERY_POSITIVE'}">
+                    <b:label text="#{tweet.sentiment}" severity="success"/>
+                </c:when>
+                <c:when test="${tweet.sentiment == 'UNKNOW'}">
+                    <b:label text="#{tweet.sentiment}" severity="default"/>
+                </c:when>
+            </c:choose>
+        </b:row>
+        
+    </b:well>
+</ui:composition>
+
+
+
+

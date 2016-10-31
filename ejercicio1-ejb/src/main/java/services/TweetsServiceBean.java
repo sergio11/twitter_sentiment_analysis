@@ -9,6 +9,7 @@ import dao.TweetDAOBeanLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import models.Tweet;
 import models.TweetsBySentiment;
 
 /**
@@ -24,5 +25,15 @@ public class TweetsServiceBean implements TweetsServiceBeanLocal {
     @Override
     public List<TweetsBySentiment> groupedBySentiment(final String topic) {
         return tweetDAOBean.groupedBySentiment(topic);
+    }
+
+    @Override
+    public List<Tweet> byTopic(final String topic) {
+        return tweetDAOBean.byTopic(topic);
+    }
+
+    @Override
+    public List<Tweet> byTopic(final String topic, final Integer count) {
+        return tweetDAOBean.byTopic(topic, count);
     }
 }

@@ -7,6 +7,7 @@ package services;
 
 import java.util.List;
 import javax.ejb.Local;
+import models.Tweet;
 import models.TweetsBySentiment;
 
 /**
@@ -17,5 +18,9 @@ import models.TweetsBySentiment;
 public interface TweetsServiceBeanLocal {
 
     List<TweetsBySentiment> groupedBySentiment(final String topic);
+
+    List<Tweet> byTopic(final String topic);
+
+    List<Tweet> byTopic(final String topic, final Integer count);
     
 }
