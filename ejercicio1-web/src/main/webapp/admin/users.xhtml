@@ -58,8 +58,8 @@
                     <h:outputText rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="#{user.mobile}" />
                 </b:dataTableColumn>
                 <b:dataTableColumn label="#{i18n['datatable.users.actions.label']}" orderable="false">
-                    <b:buttonGroup rendered="#{user.userName != sessionScope.user.userName}">
-                        <b:commandButton value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#deleteModal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.confirmDelete(user)}" update=":deleteModal:content"/>
+                    <b:buttonGroup>
+                        <b:commandButton rendered="#{user.userName != sessionScope.user.userName}" value="#{i18n['datatable.users.actions.delete']}" look="danger" p:data-target="#deleteModal" p:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{usersBean.confirmDelete(user)}" update=":deleteModal:content"/>
                         <b:commandButton rendered="#{user.userName ne usersBean.userToUpdate.userName}" value="edit" look="warning" size="xs" icon-awesome="pencil"  actionListener="#{usersBean.editUser(user)}" ajax="true" update="@form"/>
                         <b:commandButton rendered="#{user.userName eq usersBean.userToUpdate.userName}" value="save" look="success" size="xs" icon-awesome="floppy-o"  action="#{usersBean.update}" ajax="true" update="@form"/>
                     </b:buttonGroup>
