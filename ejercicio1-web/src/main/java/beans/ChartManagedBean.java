@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import models.TweetsBySentiment;
 import org.primefaces.model.chart.DonutChartModel;
 import org.primefaces.model.chart.PieChartModel;
@@ -28,12 +28,12 @@ import services.TweetsServiceBeanLocal;
  * @author sergio
  */
 @ManagedBean(name = "chartBean")
-@SessionScoped
+@ViewScoped
 public class ChartManagedBean {
     @EJB
     private TweetsServiceBeanLocal tweetsServiceBean;
-    @ManagedProperty("#{searchTopicBean}")
-    private SearchTopicsManagedBean searchTopicBean;
+    @ManagedProperty("#{topicsManagedBean}")
+    private TopicsManagedBean topicsManagedBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
     
@@ -47,17 +47,15 @@ public class ChartManagedBean {
     public Map<String, PieChartModel> getPieCharts() {
         return pieCharts;
     }
+
+    public TopicsManagedBean getTopicsManagedBean() {
+        return topicsManagedBean;
+    }
+
+    public void setTopicsManagedBean(TopicsManagedBean topicsManagedBean) {
+        this.topicsManagedBean = topicsManagedBean;
+    }
  
-
-    public SearchTopicsManagedBean getSearchTopicBean() {
-        return searchTopicBean;
-    }
-
-   
-    public void setSearchTopicBean(SearchTopicsManagedBean searchTopicBean) {
-        this.searchTopicBean = searchTopicBean;
-    }
-
     public ResourceBundle getI18n() {
         return i18n;
     }
@@ -99,7 +97,7 @@ public class ChartManagedBean {
     
     
     public void update(){
-        List<String> topicsSelected = searchTopicBean.getTopicsSelected();
+        List<String> topicsSelected = topicsManagedBean.getTopicsSelected();
         Iterator<String> ite = topicsSelected.iterator();
         while(ite.hasNext()){
             String topic = ite.next();

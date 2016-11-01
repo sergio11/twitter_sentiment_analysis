@@ -17,18 +17,12 @@ import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
 import javax.jms.Topic;
-import models.Tweet;
-import models.messages.TweetProcessedMessage;
-import models.messages.FinishTopicAnalysisMessage;
-import models.messages.StartTopicAnalysisMessage;
-import models.messages.TopicAnalysisErrorMessage;
 
 /**
  *
  * @author sergio
  */
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class TweetsProcessedBean implements TweetsProcessedBeanLocal {
     @Resource(mappedName = "jms/tweetsProcessedTopic")
     private Topic tweetsProcessedTopic;
@@ -36,33 +30,12 @@ public class TweetsProcessedBean implements TweetsProcessedBeanLocal {
     @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
     private JMSContext context;
     
-    private void sendMessage(final Serializable data){
-        Logger.getLogger(TweetsProcessedBean.class.getName()).log(Level.INFO, "PUBLICANDO MENSAJE ...");
-        ObjectMessage message = context.createObjectMessage(data);
-        context.createProducer().send(tweetsProcessedTopic, message);
-    }
     
     @Override
-    public void startTopicAnalysis(final models.Topic topic) {
-        StartTopicAnalysisMessage startTopicAnalysisMessage = new StartTopicAnalysisMessage(topic);
-        sendMessage(startTopicAnalysisMessage);
-    }
-
-    @Override
-    public void addProcessedTweet(final Tweet tweet) {
-        TweetProcessedMessage tweetProcessed = new TweetProcessedMessage(tweet.getTopic().getName(), tweet.getSentiment().name());
-        sendMessage(tweetProcessed);
-    }
-
-    @Override
-    public void finishTopicAnalysis(final models.Topic topic) {
-        FinishTopicAnalysisMessage ftam = new FinishTopicAnalysisMessage(topic.getName(), topic.getTweets().size());
-        sendMessage(ftam);
-    }
-
-    @Override
-    public void topicAnalysisError(final models.Topic topic) {
-        TopicAnalysisErrorMessage taem = new TopicAnalysisErrorMessage(topic.getName());
-        sendMessage(taem);
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void sendMessage(final Serializable message) {
+        Logger.getLogger(TweetsProcessedBean.class.getName()).log(Level.INFO, "PUBLICANDO MENSAJE ...");
+        ObjectMessage objectMessage = context.createObjectMessage(message);
+        context.createProducer().send(tweetsProcessedTopic, objectMessage);
     }
 }

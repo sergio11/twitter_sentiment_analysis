@@ -27,5 +27,7 @@ public interface TopicsServiceBeanLocal {
     Integer getTopicsCount();
 
     List<Topic> getRecentTopics(final Integer count);
+
+    Boolean exists(final String topic);
     
 }

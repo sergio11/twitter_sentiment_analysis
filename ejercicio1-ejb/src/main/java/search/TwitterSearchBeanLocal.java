@@ -8,6 +8,8 @@ package search;
 import java.util.List;
 import javax.ejb.Local;
 import models.Tweet;
+import search.exceptions.TweetsNotFound;
+import twitter4j.TwitterException;
 
 /**
  *
@@ -16,6 +18,6 @@ import models.Tweet;
 @Local
 public interface TwitterSearchBeanLocal {
 
-    List<Tweet> search(final String topic);
+    List<Tweet> search(final String topic) throws TweetsNotFound, TwitterException;
     
 }

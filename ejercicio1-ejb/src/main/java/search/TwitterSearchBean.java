@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import mapper.TweetDataMapper;
 import models.Tweet;
+import search.exceptions.TweetsNotFound;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -53,19 +54,16 @@ public class TwitterSearchBean implements TwitterSearchBeanLocal {
     }
 
     @Override
-    public List<Tweet> search(final String keyword) {
+    public List<Tweet> search(final String keyword) throws TweetsNotFound, TwitterException {
         Query query = new Query(keyword + " -filter:retweets -filter:links -filter:replies -filter:images");
         query.setCount(20);
         query.setLocale("en");
         query.setLang("en");
-        try {
-            QueryResult queryResult = twitter.search(query);
-            List<Status> tweetsStatus = queryResult.getTweets();
-            Collection<Tweet> tweets = mapper.transform(tweetsStatus);
-            return (List<Tweet>) tweets;
-        } catch (TwitterException e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
-            throw new RuntimeException(e);
-        }
+        QueryResult queryResult = twitter.search(query);
+        List<Status> tweetsStatus = queryResult.getTweets();
+        if (tweetsStatus.isEmpty())
+            throw new TweetsNotFound();
+        Collection<Tweet> tweets = mapper.transform(tweetsStatus);
+        return (List<Tweet>) tweets;
     }
 }

@@ -9,25 +9,27 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
-        <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
-            <h:outputText value="#{i18n['page.results.notresults.title']}" />
-            <h:outputText value="#{i18n['page.results.notresults.text']}" />
-        </b:alert>
-        <b:alert severity="info" rendered="#{empty searchTopicBean.topicsSelected}">
-            <h:outputText value="#{i18n['page.results.noselect']}" />
-        </b:alert>
+        <b:row id="alerts">
+            <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
+                <h:outputText value="#{i18n['page.results.notresults.title']}" />
+                <h:outputText value="#{i18n['page.results.notresults.text']}" />
+            </b:alert>
+            <b:alert severity="info" rendered="#{empty topicsManagedBean.topicsSelected}">
+                <h:outputText value="#{i18n['page.results.noselect']}" />
+            </b:alert>
+        </b:row>
         <h:form rendered="#{topicsManagedBean.totalTopics gt 0}">
             <b:row>
                 <b:inputText 
                     placeholder="#{i18n['page.results.tags.placeholder']}"
-                    value="#{searchTopicBean.topicsSelected}"
+                    value="#{topicsManagedBean.topicsSelected}"
                     tags="true"
                     typeahead="true"
                     typeahead-highlight="true"
                     typeahead-limit="10"
-                    typeahead-values="#{searchTopicBean.topicsCSV}"
+                    typeahead-values="#{topicsManagedBean.topicsCSV}"
                     onchange="ajax:chartBean.update()"
-                    update="@form:topicsResults"
+                    update="@form:topicsResults, :alerts"
                     tooltip="#{i18n['page.results.tags.tooltip']}"
                     tooltip-position="left">
                     <f:converter converterId="tagsConverter" />
@@ -38,8 +40,8 @@
             </b:row>
             <b:row  id="topicsResults">
                 <b:messages />
-                <b:panelGrid colSpans="6,6" size="md" rendered="${not empty searchTopicBean.topicsSelected}" style="margin-top: 1rem">
-                    <c:forEach var="topic" items="#{searchTopicBean.topicsSelected}">
+                <b:panelGrid colSpans="6,6" size="md" rendered="${not empty topicsManagedBean.topicsSelected}" style="margin-top: 1rem">
+                    <c:forEach var="topic" items="#{topicsManagedBean.topicsSelected}">
                         <b:panel span="6" title="Result for topic #{topic}" collapsible="false" look="info">
                             <b:row>
                                 <p:chart type="donut" model="#{chartBean.donutCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />

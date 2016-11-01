@@ -5,10 +5,15 @@
  */
 package beans;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -17,6 +22,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import models.Topic;
 import models.User;
+import org.apache.commons.lang3.StringUtils;
 import services.TopicsServiceBeanLocal;
 
 /**
@@ -31,9 +37,18 @@ public class TopicsManagedBean {
     private TopicsServiceBeanLocal topicsServiceBean;
     @ManagedProperty("#{i18n}")
     private ResourceBundle i18n;
+    private String text;
     private User currentUser;
-    private List<Topic> topics;
+    // Todos los temas analizados por el usuario
+    private List<Topic> topicsByUser;
+    // Temas recientes en el sistema
     private List<Topic> recentTopics;
+    // Todos los temas
+    private List<Topic> topics;
+    // Todos los temas en formato CSV para los input tags
+    private String topicsCSV;
+    // Temas seleccionados por el usuario
+    private List<String> topicsSelected;
     private Integer totalTopics;
     private Topic topicToDelete;
    
@@ -46,9 +61,26 @@ public class TopicsManagedBean {
         this.i18n = i18n;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public List<Topic> getTopicsByUser() {
+         // load topicsByUser for this user
+        topicsByUser = topicsServiceBean.getTopicsByUser(currentUser.getUserName());
+        return topicsByUser;
+    }
+    
+    public List<Topic> getRecentTopics() {
+        recentTopics = topicsServiceBean.getRecentTopics(MAX_RECENT_TOPICS_TO_SHOW);
+        return recentTopics;
+    }
+
     public List<Topic> getTopics() {
-         // load topics for this user
-        topics = topicsServiceBean.getTopicsByUser(currentUser.getUserName());
         return topics;
     }
 
@@ -56,9 +88,20 @@ public class TopicsManagedBean {
         this.topics = topics;
     }
 
-    public List<Topic> getRecentTopics() {
-        recentTopics = topicsServiceBean.getRecentTopics(MAX_RECENT_TOPICS_TO_SHOW);
-        return recentTopics;
+    public String getTopicsCSV() {
+        return topicsCSV;
+    }
+
+    public void setTopicsCSV(String topicsCSV) {
+        this.topicsCSV = topicsCSV;
+    }
+
+    public List<String> getTopicsSelected() {
+        return topicsSelected;
+    }
+
+    public void setTopicsSelected(List<String> topicsSelected) {
+        this.topicsSelected = topicsSelected;
     }
     
     public Integer getTotalTopics() {
@@ -79,6 +122,14 @@ public class TopicsManagedBean {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         currentUser = (User) externalContext.getSessionMap().get("user");
+        topics = topicsServiceBean.getTopics();
+        List<String> topicNames = Lists.transform(topics, new Function<Topic, String>(){
+            @Override
+            public String apply(Topic topic) {
+                return topic.getName();
+            }
+        });
+        topicsCSV = StringUtils.join(topicNames, ",");
     }
     
     public void confirmDelete(Topic t){
@@ -93,5 +144,28 @@ public class TopicsManagedBean {
         message.setDetail(i18n.getString("confirm.remove.topic"));
         FacesContext.getCurrentInstance().addMessage(null, message);
         topicToDelete = null;
+    }
+    // Permite analizar un temas
+    public void analyze(){
+         try {
+             FacesMessage message = new FacesMessage();
+            if(!topicsServiceBean.exists(text)){
+                // analyze topic
+                Topic topic = new Topic();
+                topic.setName(text);
+                topic.setUser(currentUser);
+                topicsServiceBean.analyzeTopic(topic);
+                // add confirmation message
+                message.setSeverity(FacesMessage.SEVERITY_INFO);
+                message.setDetail("Analizando tema:" + text);
+            } else {
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                message.setDetail("Ya existe el tema:" + text);
+                text = null;
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch(EJBException e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+        }
     }
 }

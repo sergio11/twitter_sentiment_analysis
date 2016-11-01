@@ -14,9 +14,11 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -31,15 +33,16 @@ import models.ProgressTopic;
 import models.messages.FinishTopicAnalysisMessage;
 import models.messages.StartTopicAnalysisMessage;
 import models.messages.TweetProcessedMessage;
+import models.messages.TweetsNotFoundForTopic;
 import utils.IVisitable;
 import visitor.IProcessMessageVisitor;
 /**
  *
  * @author sergio
  */
-@ManagedBean(name = "liveSentimentChartBean")
+@ManagedBean(name = "progressTopicBean")
 @ViewScoped
-public class LiveSentimentChartManagedBean implements Serializable, MessageListener, IProcessMessageVisitor {
+public class ProgressTopicManagedBean implements Serializable, MessageListener, IProcessMessageVisitor {
     @Resource(mappedName = "jms/tweetsProcessedTopicFactory")
     private ConnectionFactory queueFactory;
     @Resource(mappedName = "jms/tweetsProcessedTopic")
@@ -71,7 +74,7 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
             consumer.setMessageListener(this);
             qConnection.start();
         } catch (Exception ex) {
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
   
@@ -81,7 +84,7 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
             try {
                 qConnection.close();
             } catch (JMSException ex) {
-                Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -89,19 +92,19 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
     @Override
     public void onMessage(Message message) {
         try {
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "PROCESANDO EVENTO ...");
+            Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.INFO, "PROCESANDO EVENTO ...");
             Object msg = ((ObjectMessage) message).getObject();
             IVisitable<IProcessMessageVisitor> visitableMsg = (IVisitable<IProcessMessageVisitor>)msg;
             visitableMsg.accept(this);
         } catch (JMSException ex) {
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void visit(TweetProcessedMessage message) {
         ProgressTopic progressTopic = topicsInProgress != null ? topicsInProgress.get(message.getTopic()) : null;
-        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
+        Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.INFO, "update chart ...");
         
         if (progressTopic != null) {
             progressTopic.setTweets(progressTopic.getTweets() + 1);
@@ -109,25 +112,33 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
             Map<String, Number> data = progressTopic.getChart().getData();
             data.put(label, data.get(label).intValue() + 1);
             progressTopic.getChart().setData(data);
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, message.toString());
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + message.getSentiment());
+            Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, message.toString());
+            Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + message.getSentiment());
         }else{
-            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "ProgressTopic es nulo");
+            Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.INFO, "ProgressTopic es nulo");
         }
         
     }
 
     @Override
     public void visit(StartTopicAnalysisMessage message) {
-        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Iniciándo análisis para el topic: " + message.getTopic().getName());
+        Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, "Iniciándo análisis para el topic: " + message.getTopic().getName());
         ProgressTopic progressTopic = progressTopicDataMapper.transform(message.getTopic());
         topicsInProgress.put(message.getTopic().getName(), progressTopic);
     }
 
     @Override
     public void visit(FinishTopicAnalysisMessage message) {
-        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Finalizando análsis para el topic: " + message.getTopic());
+        Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, "Finalizando análsis para el topic: " + message.getTopic());
         ProgressTopic progressTopic = topicsInProgress != null ? topicsInProgress.get(message.getTopic()) : null;
         progressTopic.setIsFinished(Boolean.TRUE);
+    }
+
+    @Override
+    public void visit(TweetsNotFoundForTopic message) {
+        FacesMessage facesMessage = new FacesMessage();
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        facesMessage.setDetail(i18n.getString("errors.tweets.notfound"));
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
     }
 }

@@ -13,13 +13,13 @@
         <!-- Include Modal for delete topic -->
         <ui:include src="/WEB-INF/content/confirm-delete-topic.xhtml" />
         <b:row>
-            <b:alert severity="info">
-                <h:outputText value="#{i18n['page.topics.info']}" />
-            </b:alert>
             <b:column col-md="9">
                 <b:tabView activeIndex="0" id="tabs">
                     <b:tab title="#{i18n['page.topics.tabs.all']}">
                         <h:form id="topics">
+                            <b:alert severity="info">
+                                <h:outputText value="#{i18n['page.topics.table.info']}" />
+                            </b:alert>
                             <b:messages />
                             <b:dataTable
                                 id="datatable"
@@ -50,8 +50,14 @@
                             <b:iconAwesome name="cog" spin="true" />
                         </f:facet>
                         <h:form id="analysis">
-                            <b:row>
-                                <b:inputText id="searchText" col-md="6" offset-md="3" placeholder="Type something here..." value="#{twitterSearch.text}">
+                            <b:row id="alerts">
+                                <b:alert severity="info" rendered="#{empty topicsManagedBean.text}">
+                                    <h:outputText value="#{i18n['page.topics.search.info']}" />
+                                </b:alert>
+                                <b:messages />
+                            </b:row>
+                            <b:row id="search">
+                                <b:inputText id="searchText" col-md="6" offset-md="3" placeholder="Type something here..." value="#{topicsManagedBean.text}">
                                     <f:facet name="prepend">
                                         <b:iconAwesome name="search" />
                                     </f:facet>
@@ -59,22 +65,22 @@
                                         <b:commandButton 
                                             value="Search" 
                                             look="success"
-                                            action="#{twitterSearch.search}" 
-                                            update="@form:results" 
+                                            action="#{topicsManagedBean.analyze}" 
+                                            update="@form" 
                                             process="searchText" />
 
                                     </f:facet>
                                 </b:inputText>
                             </b:row>
                             <b:row id="results" style="margin-top: 1rem">
-                                <b:panelGrid colSpans="6,6" size="md" rendered="${not empty twitterSearch.text or not empty twitterSearch.result }">
+                                <b:panelGrid colSpans="6,6" size="md" rendered="${not empty topicsManagedBean.text}">
                                     <b:poll interval="3" update="@next" execute="@none"/>
-                                    <b:panel title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                                        <b:alert severity="info" rendered="#{not liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">Iniciando análisis espere ...</b:alert>
-                                        <b:row rendered="#{liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">
+                                    <b:panel title="Tweets for #{topicsManagedBean.text}" collapsible="false" look="info" col-md="6">
+                                        <b:alert severity="info" rendered="#{not progressTopicBean.topicsInProgress.containsKey(topicsManagedBean.text)}">Iniciando análisis espere ...</b:alert>
+                                        <b:row rendered="#{progressTopicBean.topicsInProgress.containsKey(topicsManagedBean.text)}">
                                             <p:chart id="sentimentChart"
                                                      type="pie"
-                                                     model="#{liveSentimentChartBean.topicsInProgress.get(twitterSearch.text).chart}" 
+                                                     model="#{progressTopicBean.topicsInProgress.get(topicsManagedBean.text).chart}" 
                                                      style="width:400px;height:300px"/>
                                         </b:row>
                                     </b:panel>

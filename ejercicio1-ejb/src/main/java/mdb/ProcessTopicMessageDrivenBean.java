@@ -7,6 +7,7 @@ package mdb;
 
 import search.TwitterSearchBeanLocal;
 import analyzer.SentimentAnalyzerBeanLocal;
+import dao.TopicDAOBeanLocal;
 import dao.TweetDAOBeanLocal;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +24,12 @@ import javax.jms.ObjectMessage;
 import models.Sentiment;
 import models.Topic;
 import models.Tweet;
+import models.messages.FinishTopicAnalysisMessage;
+import models.messages.StartTopicAnalysisMessage;
+import models.messages.TweetProcessedMessage;
+import models.messages.TweetsNotFoundForTopic;
+import search.exceptions.TweetsNotFound;
+import twitter4j.TwitterException;
 
 /**
  *
@@ -34,6 +41,7 @@ import models.Tweet;
 })
 public class ProcessTopicMessageDrivenBean implements MessageListener {
     
+    
     @Resource
     private MessageDrivenContext mdctx;
     @EJB
@@ -42,6 +50,8 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
     @EJB
     private TweetDAOBeanLocal tweetDAOBean;
+    @EJB
+    private TopicDAOBeanLocal topicDAOBean;
     @EJB
     private TweetsProcessedBeanLocal tweetsProcessedBean;
     
@@ -52,7 +62,8 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
             ObjectMessage objectMessage = (ObjectMessage) message;
             Topic topic = (Topic) objectMessage.getObject();
             // send start analysis
-            tweetsProcessedBean.startTopicAnalysis(topic);
+            StartTopicAnalysisMessage startTopicAnalysisMessage = new StartTopicAnalysisMessage(topic);
+            tweetsProcessedBean.sendMessage(startTopicAnalysisMessage);
             // search tweets for topic
             List<Tweet> tweets = twitterSearchBean.search(topic.getName());
             // get sentiments for tweets
@@ -61,18 +72,26 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 tweet.setSentiment(sentiment);
                 tweet.setTopic(topic);
                 // send tweet processed
-                tweetsProcessedBean.addProcessedTweet(tweet);
+                TweetProcessedMessage tweetProcessed = new TweetProcessedMessage(topic.getName(), sentiment.name());
+                tweetsProcessedBean.sendMessage(tweetProcessed);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            topicDAOBean.persist(topic);
             tweetDAOBean.persist(tweets);
-            tweetsProcessedBean.finishTopicAnalysis(topic);
+            FinishTopicAnalysisMessage ftam = new FinishTopicAnalysisMessage(topic.getName(), tweets.size());
+            tweetsProcessedBean.sendMessage(ftam);
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
-        }   
+        } catch(TweetsNotFound ex){
+            tweetsProcessedBean.sendMessage(new TweetsNotFoundForTopic());
+        }catch(Exception ex){
+        
+        }
     }
     
 }

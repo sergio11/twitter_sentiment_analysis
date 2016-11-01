@@ -3,16 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mdb;
-
-import java.io.Serializable;
-import javax.ejb.Local;
+package search.exceptions;
 
 /**
  *
  * @author sergio
  */
-@Local
-public interface TweetsProcessedBeanLocal {
-    void sendMessage(final Serializable message);
-}
+public class TweetsNotFound extends Exception{}

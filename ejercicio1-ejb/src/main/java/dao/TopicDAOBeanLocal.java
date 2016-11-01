@@ -27,5 +27,7 @@ public interface TopicDAOBeanLocal {
     Integer count();
 
     List<Topic> recent(final Integer count);
+
+    Boolean exists(final String topic);
     
 }

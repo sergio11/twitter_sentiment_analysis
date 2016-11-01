@@ -8,6 +8,7 @@ package visitor;
 import models.messages.FinishTopicAnalysisMessage;
 import models.messages.StartTopicAnalysisMessage;
 import models.messages.TweetProcessedMessage;
+import models.messages.TweetsNotFoundForTopic;
 import utils.IVisitor;
 
 /**
@@ -18,4 +19,5 @@ public interface IProcessMessageVisitor extends IVisitor {
     void visit(TweetProcessedMessage message);
     void visit(StartTopicAnalysisMessage message);
     void visit(FinishTopicAnalysisMessage message);   
+    void visit(TweetsNotFoundForTopic message);
 }

@@ -50,8 +50,7 @@ public class TopicsServiceBean implements TopicsServiceBeanLocal {
 
     @Override
     public void analyzeTopic(final Topic topic) {
-        //save topic
-        topicDAOBean.persist(topic);
+
         // enqueue message
         ObjectMessage message = 
                   context.createObjectMessage(topic);
@@ -66,5 +65,10 @@ public class TopicsServiceBean implements TopicsServiceBeanLocal {
     @Override
     public List<Topic> getRecentTopics(final Integer count) {
         return topicDAOBean.recent(count);
+    }
+
+    @Override
+    public Boolean exists(final String topic) {
+        return topicDAOBean.exists(topic);
     }
 }
