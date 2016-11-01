@@ -5,12 +5,16 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
         <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
             <h:outputText value="#{i18n['page.results.notresults.title']}" />
             <h:outputText value="#{i18n['page.results.notresults.text']}" />
+        </b:alert>
+        <b:alert severity="info" rendered="#{empty searchTopicBean.topicsSelected}">
+            <h:outputText value="#{i18n['page.results.noselect']}" />
         </b:alert>
         <h:form rendered="#{topicsManagedBean.totalTopics gt 0}">
             <b:row>
@@ -35,7 +39,7 @@
             <b:row  id="topicsResults">
                 <b:messages />
                 <b:panelGrid colSpans="6,6" size="md" rendered="${not empty searchTopicBean.topicsSelected}" style="margin-top: 1rem">
-                    <ui:repeat var="topic" value="#{searchTopicBean.topicsSelected}">
+                    <c:forEach var="topic" items="#{searchTopicBean.topicsSelected}">
                         <b:panel span="6" title="Result for topic #{topic}" collapsible="false" look="info">
                             <b:row>
                                 <p:chart type="donut" model="#{chartBean.donutCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
@@ -44,7 +48,7 @@
                                 <p:chart type="pie" model="#{chartBean.pieCharts.get(topic)}" style="width:70%;height:300px;margin: 0 auto;" />
                             </b:row>
                         </b:panel>
-                    </ui:repeat>
+                    </c:forEach>
                 </b:panelGrid>
             </b:row>
         </h:form>
