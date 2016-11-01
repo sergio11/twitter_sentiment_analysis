@@ -12,14 +12,17 @@
     <ui:define name="content">
         <!-- Include Modal for delete topic -->
         <ui:include src="/WEB-INF/content/confirm-delete-topic.xhtml" />
-        <h:form id="analysis">
-            <b:row>
-                <b:column col-md="9">
-                    <b:tabView activeIndex="0" id="tabs">
-                        <b:tab title="#{i18n['page.topics.tabs.all']}" id="topicsTab">
+        <b:row>
+            <b:alert severity="info">
+                <h:outputText value="#{i18n['page.topics.info']}" />
+            </b:alert>
+            <b:column col-md="9">
+                <b:tabView activeIndex="0" id="tabs">
+                    <b:tab title="#{i18n['page.topics.tabs.all']}">
+                        <h:form id="topics">
                             <b:messages />
                             <b:dataTable
-                                id="topicsTable"
+                                id="datatable"
                                 value="#{topicsManagedBean.topics}"
                                 fixedHeader="true"
                                 scroll-size="300px"
@@ -29,18 +32,24 @@
                                 responsive="true"
                                 style="margin-top: 1rem;">
                                 <b:dataTableColumn label="#{i18n['datatable.topics.name.label']}" value="#{topic.name}" />
-                                <b:dataTableColumn label="#{i18n['datatable.topics.tweets.label']}" value="#{topic.tweets.size()}" />
+                                <b:dataTableColumn label="#{i18n['datatable.topics.createAt.label']}">
+                                    <h:outputText value="#{topic.createAt}" >
+                                        <f:convertDateTime type="date" pattern="dd/MM/yy"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
                                 <b:dataTableColumn label="#{i18n['datatable.topics.actions.label']}" orderable="false">
                                     <b:buttonGroup>
                                         <b:commandButton value="#{i18n['datatable.topics.actions.remove.label']}" look="danger" pass:data-target="#deleteTopicModal" pass:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{topicsManagedBean.confirmDelete(topic)}" update=":deleteTopicModal:content"/>
                                     </b:buttonGroup>
                                 </b:dataTableColumn>
                             </b:dataTable>
-                        </b:tab>
-                        <b:tab title="#{i18n['page.topics.tabs.analyze']}">
-                            <f:facet name="anchor">
-                                <b:iconAwesome name="cog" spin="true" />
-                            </f:facet>
+                        </h:form>
+                    </b:tab>
+                    <b:tab title="#{i18n['page.topics.tabs.analyze']}">
+                        <f:facet name="anchor">
+                            <b:iconAwesome name="cog" spin="true" />
+                        </f:facet>
+                        <h:form id="analysis">
                             <b:row>
                                 <b:inputText id="searchText" col-md="6" offset-md="3" placeholder="Type something here..." value="#{twitterSearch.text}">
                                     <f:facet name="prepend">
@@ -51,43 +60,45 @@
                                             value="Search" 
                                             look="success"
                                             action="#{twitterSearch.search}" 
-                                            update=":analysis:**:results" 
+                                            update="@form:results" 
                                             process="searchText" />
 
                                     </f:facet>
                                 </b:inputText>
                             </b:row>
-                            <b:row id="results" rendered="${not empty twitterSearch.text or not empty twitterSearch.result }">
-                                <b:poll interval="3" update="@next" />
-                                <b:panel title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
-                                    <b:alert severity="info" rendered="#{not liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">Iniciando análisis espere ...</b:alert>
-                                    <b:row rendered="#{liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">
-                                        <p:chart id="sentimentChart"
-                                                 type="pie"
-                                                 model="#{liveSentimentChartBean.topicsInProgress.get(twitterSearch.text).chart}" 
-                                                 style="width:400px;height:300px"/>
-                                    </b:row>
-                                </b:panel>
+                            <b:row id="results" style="margin-top: 1rem">
+                                <b:panelGrid colSpans="6,6" size="md" rendered="${not empty twitterSearch.text or not empty twitterSearch.result }">
+                                    <b:poll interval="3" update="@next" execute="@none"/>
+                                    <b:panel title="Tweets for #{twitterSearch.text}" collapsible="false" look="info" col-md="6">
+                                        <b:alert severity="info" rendered="#{not liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">Iniciando análisis espere ...</b:alert>
+                                        <b:row rendered="#{liveSentimentChartBean.topicsInProgress.containsKey(twitterSearch.text)}">
+                                            <p:chart id="sentimentChart"
+                                                     type="pie"
+                                                     model="#{liveSentimentChartBean.topicsInProgress.get(twitterSearch.text).chart}" 
+                                                     style="width:400px;height:300px"/>
+                                        </b:row>
+                                    </b:panel>
+                                </b:panelGrid>
                             </b:row>
-                        </b:tab>
-                    </b:tabView>
-                </b:column>
-                <b:column col-md="3">
-                    <!-- Sidebar con los temas analizados recientement -->
-                    <h4>#{i18n['page.topics.recent']}</h4>
-                    <b:accordion id="recentTopics">
-                        <c:forEach var="topic" items="#{topicsManagedBean.recentTopics}">
-                            <b:panel title="#{topic.name}">
-                                <c:forEach var="tweet" items="#{tweetsManagedBean.getTweetsByTopic(topic.name, 3)}">
-                                    <ui:include src="/WEB-INF/content/tweet-template.xhtml">
-                                        <ui:param name="tweet" value="#{tweet}" />
-                                    </ui:include>
-                                </c:forEach>
-                            </b:panel>
-                        </c:forEach>
-                    </b:accordion>
-                </b:column>
-            </b:row>
-        </h:form>
+                        </h:form>
+                    </b:tab>
+                </b:tabView>
+            </b:column>
+            <b:column col-md="3">
+                <!-- Sidebar con los temas analizados recientement -->
+                <h4>#{i18n['page.topics.recent']}</h4>
+                <b:accordion id="recentTopics">
+                    <c:forEach var="topic" items="#{topicsManagedBean.recentTopics}">
+                        <b:panel title="#{topic.name}">
+                            <c:forEach var="tweet" items="#{tweetsManagedBean.getTweetsByTopic(topic.name, 3)}">
+                                <ui:include src="/WEB-INF/content/tweet-template.xhtml">
+                                    <ui:param name="tweet" value="#{tweet}" />
+                                </ui:include>
+                            </c:forEach>
+                        </b:panel>
+                    </c:forEach>
+                </b:accordion>
+            </b:column>
+        </b:row>
     </ui:define>
 </ui:composition>

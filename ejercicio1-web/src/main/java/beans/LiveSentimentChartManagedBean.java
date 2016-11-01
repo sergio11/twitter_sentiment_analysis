@@ -102,14 +102,19 @@ public class LiveSentimentChartManagedBean implements Serializable, MessageListe
     public void visit(TweetProcessedMessage message) {
         ProgressTopic progressTopic = topicsInProgress != null ? topicsInProgress.get(message.getTopic()) : null;
         Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "update chart ...");
+        
         if (progressTopic != null) {
             progressTopic.setTweets(progressTopic.getTweets() + 1);
             String label = message.getSentiment();
             Map<String, Number> data = progressTopic.getChart().getData();
             data.put(label, data.get(label).intValue() + 1);
             progressTopic.getChart().setData(data);
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, message.toString());
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + message.getSentiment());
+        }else{
+            Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.INFO, "ProgressTopic es nulo");
         }
-        Logger.getLogger(LiveSentimentChartManagedBean.class.getName()).log(Level.SEVERE, "Se ha procesado el tweet: " + message.getSentiment());
+        
     }
 
     @Override

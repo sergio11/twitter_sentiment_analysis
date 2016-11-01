@@ -92,6 +92,6 @@ public class TopicsManagedBean {
         message.setSeverity(FacesMessage.SEVERITY_INFO);
         message.setDetail(i18n.getString("confirm.remove.topic"));
         FacesContext.getCurrentInstance().addMessage(null, message);
-        topicToDelete = new Topic();
+        topicToDelete = null;
     }
 }

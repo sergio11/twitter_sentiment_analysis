@@ -76,7 +76,7 @@ public class TopicDAOBean implements TopicDAOBeanLocal {
     @Override
     public List<Topic> recent(final Integer count) {
         try {
-            return em.createNamedQuery("Topic.recent").getResultList();
+            return em.createNamedQuery("Topic.recent").setMaxResults(count).getResultList();
         }catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);

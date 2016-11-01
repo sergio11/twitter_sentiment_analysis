@@ -53,7 +53,6 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
             Topic topic = (Topic) objectMessage.getObject();
             // send start analysis
             tweetsProcessedBean.startTopicAnalysis(topic);
-            Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.INFO, "Analizando término: " + topic.getName());
             // search tweets for topic
             List<Tweet> tweets = twitterSearchBean.search(topic.getName());
             // get sentiments for tweets

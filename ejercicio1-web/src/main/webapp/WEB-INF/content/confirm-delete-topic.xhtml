@@ -6,14 +6,19 @@
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <b:modal id="deleteTopicModal" title="#{i18n['form.remove.topic.title']}">
-        <h:outputFormat id="content" value="#{i18n['form.remove.topic.text']}">
-            <f:param value="#{topicsManagedBean.topicToDelete.name}"/>
-            <f:param value="#{topicsManagedBean.topicToDelete.tweets.size()}"/>
-        </h:outputFormat>
+        <b:row id="content">
+            <h:outputFormat rendered="#{not empty topicsManagedBean.topicToDelete}" value="#{i18n['form.remove.topic.text']}">
+                <f:param value="#{topicsManagedBean.topicToDelete.name}"/>
+                <f:param value="#{topicsManagedBean.topicToDelete.tweets.size()}"/>
+            </h:outputFormat>
+            <b:alert severity="info" rendered="#{empty topicsManagedBean.topicToDelete}">
+                <h:outputText value="#{i18n['wait.remove.topic']}" />
+            </b:alert>
+        </b:row>
         <f:facet name="footer">
             <h:form>
                 <b:button value="#{i18n['form.remove.cancel']}" dismiss="modal"/>
-                <b:commandButton look="danger" value="#{i18n['form.remove.submit']}" action="${topicsManagedBean.remove()}"  ajax="true" update=":analysis:**:topicsTab, :analysis:**:recentTopics"/>
+                <b:commandButton look="danger" value="#{i18n['form.remove.submit']}" action="${topicsManagedBean.remove()}"  ajax="true" update=":tabs:**:topics, :recentTopics"/>
             </h:form>
         </f:facet>
     </b:modal>

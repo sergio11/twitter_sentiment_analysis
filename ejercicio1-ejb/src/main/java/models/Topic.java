@@ -34,7 +34,7 @@ import javax.persistence.UniqueConstraint;
         = @UniqueConstraint(columnNames = {"name"}))
 @NamedQueries({
     @NamedQuery(name = "Topic.all", query = "SELECT t FROM Topic t"),
-    @NamedQuery(name = "TopicsByUser", query = "SELECT t FROM Topic t WHERE t.user.userName = :userName"),
+    @NamedQuery(name = "TopicsByUser", query = "SELECT t FROM Topic t WHERE t.user.userName = :userName ORDER BY t.createAt DESC"),
     @NamedQuery(name = "Topic.count", query = "SELECT COUNT(T) FROM Topic t"),
     @NamedQuery(name = "Topic.recent", query = "SELECT t FROM Topic t ORDER BY t.createAt DESC")
 })
