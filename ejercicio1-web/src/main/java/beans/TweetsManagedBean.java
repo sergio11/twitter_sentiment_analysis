@@ -21,9 +21,10 @@ import services.TweetsServiceBeanLocal;
 @ManagedBean(name = "tweetsManagedBean")
 @ViewScoped
 public class TweetsManagedBean {
+    
     @EJB
     private TweetsServiceBeanLocal tweetsServiceBean;
-
+    
     public List<Tweet> getTweetsByTopic(final String topic){
         return tweetsServiceBean.byTopic(topic);
     }

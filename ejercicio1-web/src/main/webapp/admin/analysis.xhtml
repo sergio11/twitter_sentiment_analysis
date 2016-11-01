@@ -12,6 +12,8 @@
     <ui:define name="content">
         <!-- Include Modal for delete topic -->
         <ui:include src="/WEB-INF/content/confirm-delete-topic.xhtml" />
+        <!-- Include Modal for show topic -->
+        <ui:include src="/WEB-INF/content/show-topic.xhtml" />
         <b:row>
             <b:column col-md="9">
                 <b:tabView activeIndex="0" id="tabs">
@@ -37,8 +39,9 @@
                                         <f:convertDateTime type="date" pattern="dd/MM/yy"/>
                                     </h:outputText>
                                 </b:dataTableColumn>
-                                <b:dataTableColumn label="#{i18n['datatable.topics.actions.label']}" orderable="false">
+                                <b:dataTableColumn label="#{i18n['datatable.topics.actions.label']}" orderable="false" >
                                     <b:buttonGroup>
+                                        <b:commandButton value="#{i18n['datatable.topics.actions.show.label']}" look="info" pass:data-target="#showTopicModal" pass:data-toggle="modal"  size="xs" icon-awesome="eye" action="#{topicsManagedBean.showTopic(topic)}" update=":showTopicModal:data"/>
                                         <b:commandButton value="#{i18n['datatable.topics.actions.remove.label']}" look="danger" pass:data-target="#deleteTopicModal" pass:data-toggle="modal"  size="xs" icon-awesome="trash" action="#{topicsManagedBean.confirmDelete(topic)}" update=":deleteTopicModal:content"/>
                                     </b:buttonGroup>
                                 </b:dataTableColumn>
@@ -101,6 +104,9 @@
                                     <ui:param name="tweet" value="#{tweet}" />
                                 </ui:include>
                             </c:forEach>
+                            <h:form>
+                                <b:commandButton value="#{i18n['page.topics.show.all.tweets']}" look="info" pass:data-target="#showTopicModal" pass:data-toggle="modal"  size="xs" icon-awesome="eye" action="#{topicsManagedBean.showTopic(topic)}" update=":showTopicModal:data"/>
+                            </h:form>
                         </b:panel>
                     </c:forEach>
                 </b:accordion>

@@ -50,7 +50,10 @@ public class TopicsManagedBean {
     // Temas seleccionados por el usuario
     private List<String> topicsSelected;
     private Integer totalTopics;
+    // Tema que se va borrar
     private Topic topicToDelete;
+    // Tema para ver en detalle
+    private Topic topicToShow;
    
 
     public ResourceBundle getI18n() {
@@ -116,6 +119,14 @@ public class TopicsManagedBean {
     public void setTopicToDelete(Topic topicToDelete) {
         this.topicToDelete = topicToDelete;
     }
+
+    public Topic getTopicToShow() {
+        return topicToShow;
+    }
+
+    public void setTopicToShow(Topic topicToShow) {
+        this.topicToShow = topicToShow;
+    }
     
     @PostConstruct
     protected void init(){
@@ -134,6 +145,10 @@ public class TopicsManagedBean {
     
     public void confirmDelete(Topic t){
         topicToDelete = t;
+    }
+    
+    public void showTopic(Topic t){
+        topicToShow = t;
     }
     
     public void remove(){

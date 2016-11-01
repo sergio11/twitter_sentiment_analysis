@@ -74,6 +74,8 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
                 // send tweet processed
                 TweetProcessedMessage tweetProcessed = new TweetProcessedMessage(topic.getName(), sentiment.name());
                 tweetsProcessedBean.sendMessage(tweetProcessed);
+                // Retrasamos 2 segundos cada iteración para porder visualizar como cambian las gráficas en tiempo real
+                // En un caso real, serán tantos los tweets que no será necesario es retraso
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {

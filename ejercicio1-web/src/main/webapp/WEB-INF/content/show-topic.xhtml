@@ -1,0 +1,22 @@
+<ui:composition
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:u="http://java.sun.com/jsf/composite/doublePassword">
+    
+    <b:modal id="showTopicModal" title="#{i18n['page.topics.title']}" closable="false" close-on-escape="false" backdrop="false">
+        <b:row id="data">
+            <ui:repeat var="tweet" value="#{tweetsManagedBean.getTweetsByTopic(topicsManagedBean.topicsSelected.name)}">
+                <ui:include src="/WEB-INF/content/tweet-template.xhtml">
+                    <ui:param name="tweet" value="#{tweet}" />
+                </ui:include>
+            </ui:repeat>
+        </b:row>
+        <f:facet name="footer">
+            <b:button value="Cerrar" look="primary" dismiss="modal" onclick="return false;"/>
+        </f:facet>
+    </b:modal>
+    
+</ui:composition>
+
