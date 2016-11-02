@@ -17,7 +17,7 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import models.Topic;
@@ -30,7 +30,7 @@ import services.TopicsServiceBeanLocal;
  * @author sergio
  */
 @ManagedBean(name = "topicsManagedBean")
-@ViewScoped
+@SessionScoped
 public class TopicsManagedBean {
     private final static Integer MAX_RECENT_TOPICS_TO_SHOW = 5;
     @EJB

@@ -9,6 +9,7 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
+        <p:inputText style="display:none;" />
         <b:row id="alerts">
             <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
                 <h:outputText value="#{i18n['page.results.notresults.title']}" />

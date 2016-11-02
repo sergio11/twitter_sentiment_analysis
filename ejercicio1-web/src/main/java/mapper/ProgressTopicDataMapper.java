@@ -31,7 +31,7 @@ public class ProgressTopicDataMapper implements IDataMapper<ProgressTopic, Topic
         pieChart.setDiameter(150);
         progressTopic.setChart(pieChart);
         progressTopic.setTopic(model.getName());
-        progressTopic.setTweets(model.getTweets().size());
+        progressTopic.setTweets(model.getTweets() != null ? model.getTweets().size() : 0);
         progressTopic.setIsFinished(Boolean.FALSE);
         return progressTopic;
     }

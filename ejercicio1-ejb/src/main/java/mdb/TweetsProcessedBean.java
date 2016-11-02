@@ -27,10 +27,9 @@ public class TweetsProcessedBean implements TweetsProcessedBeanLocal {
     @Resource(mappedName = "jms/tweetsProcessedTopic")
     private Topic tweetsProcessedTopic;
     @Inject
-    @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
+    @JMSConnectionFactory("jms/tweetsProcessedTopicFactory")
     private JMSContext context;
-    
-    
+ 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void sendMessage(final Serializable message) {

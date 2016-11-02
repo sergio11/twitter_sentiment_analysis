@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import models.TweetsBySentiment;
 import org.primefaces.model.chart.DonutChartModel;
 import org.primefaces.model.chart.PieChartModel;
@@ -28,7 +28,7 @@ import services.TweetsServiceBeanLocal;
  * @author sergio
  */
 @ManagedBean(name = "chartBean")
-@ViewScoped
+@SessionScoped
 public class ChartManagedBean {
     @EJB
     private TweetsServiceBeanLocal tweetsServiceBean;
@@ -87,7 +87,7 @@ public class ChartManagedBean {
             String label = tbs.getSentiment().name();
             pieChart.set(label, tbs.getTweets());
         }
-        pieChart.setTitle("Custom Pie");
+        pieChart.setTitle(i18n.getString("page.results.charts.donut.title"));
         pieChart.setLegendPosition("e");
         pieChart.setFill(false);
         pieChart.setShowDataLabels(true);

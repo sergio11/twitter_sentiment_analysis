@@ -25,7 +25,7 @@
                             <b:messages />
                             <b:dataTable
                                 id="datatable"
-                                value="#{topicsManagedBean.topics}"
+                                value="#{topicsManagedBean.topicsByUser}"
                                 fixedHeader="true"
                                 scroll-size="300px"
                                 scroll-x="false"
@@ -69,7 +69,7 @@
                                             value="Search" 
                                             look="success"
                                             action="#{topicsManagedBean.analyze}" 
-                                            update="@form" 
+                                            update="analysis"
                                             process="searchText" />
 
                                     </f:facet>
@@ -77,7 +77,7 @@
                             </b:row>
                             <b:row id="results" style="margin-top: 1rem">
                                 <b:panelGrid colSpans="6,6" size="md" rendered="${not empty topicsManagedBean.text}">
-                                    <b:poll interval="3" update="@next" execute="@none"/>
+                                    <!-- <b:poll interval="3" update="@next" execute="@none"/> -->
                                     <b:panel title="Tweets for #{topicsManagedBean.text}" collapsible="false" look="info" col-md="6">
                                         <b:alert severity="info" rendered="#{not progressTopicBean.topicsInProgress.containsKey(topicsManagedBean.text)}">Iniciando análisis espere ...</b:alert>
                                         <b:row rendered="#{progressTopicBean.topicsInProgress.containsKey(topicsManagedBean.text)}">
@@ -96,6 +96,9 @@
             <b:column col-md="3">
                 <!-- Sidebar con los temas analizados recientement -->
                 <h4>#{i18n['page.topics.recent']}</h4>
+                <b:alert severity="info" rendered="#{topicsManagedBean.totalTopics eq 0}">
+                    <h:outputText value="#{i18n['not.recent.topics']}" />
+                </b:alert>
                 <b:accordion id="recentTopics">
                     <c:forEach var="topic" items="#{topicsManagedBean.recentTopics}">
                         <b:panel title="#{topic.name}">

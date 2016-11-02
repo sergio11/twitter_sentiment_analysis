@@ -95,6 +95,7 @@ public class ProgressTopicManagedBean implements Serializable, MessageListener, 
             Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.INFO, "PROCESANDO EVENTO ...");
             Object msg = ((ObjectMessage) message).getObject();
             IVisitable<IProcessMessageVisitor> visitableMsg = (IVisitable<IProcessMessageVisitor>)msg;
+            // Se ha aplicado patrón visitor
             visitableMsg.accept(this);
         } catch (JMSException ex) {
             Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,6 +137,7 @@ public class ProgressTopicManagedBean implements Serializable, MessageListener, 
 
     @Override
     public void visit(TweetsNotFoundForTopic message) {
+        Logger.getLogger(ProgressTopicManagedBean.class.getName()).log(Level.SEVERE, "Tweets not found for this topic");
         FacesMessage facesMessage = new FacesMessage();
         facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
         facesMessage.setDetail(i18n.getString("errors.tweets.notfound"));

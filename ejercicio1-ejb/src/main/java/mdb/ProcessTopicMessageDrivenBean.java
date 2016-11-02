@@ -8,7 +8,6 @@ package mdb;
 import search.TwitterSearchBeanLocal;
 import analyzer.SentimentAnalyzerBeanLocal;
 import dao.TopicDAOBeanLocal;
-import dao.TweetDAOBeanLocal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +28,6 @@ import models.messages.StartTopicAnalysisMessage;
 import models.messages.TweetProcessedMessage;
 import models.messages.TweetsNotFoundForTopic;
 import search.exceptions.TweetsNotFound;
-import twitter4j.TwitterException;
 
 /**
  *
@@ -49,11 +47,10 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
     @EJB
     private SentimentAnalyzerBeanLocal sentimentAnalyzerBean;
     @EJB
-    private TweetDAOBeanLocal tweetDAOBean;
-    @EJB
     private TopicDAOBeanLocal topicDAOBean;
     @EJB
     private TweetsProcessedBeanLocal tweetsProcessedBean;
+    
     
     @Override
     public void onMessage(Message message) {
@@ -84,15 +81,15 @@ public class ProcessTopicMessageDrivenBean implements MessageListener {
             }
             
             topicDAOBean.persist(topic);
-            tweetDAOBean.persist(tweets);
             FinishTopicAnalysisMessage ftam = new FinishTopicAnalysisMessage(topic.getName(), tweets.size());
             tweetsProcessedBean.sendMessage(ftam);
         } catch (JMSException ex) {
            mdctx.setRollbackOnly();
         } catch(TweetsNotFound ex){
             tweetsProcessedBean.sendMessage(new TweetsNotFoundForTopic());
+            Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.SEVERE, "Tweets not found for this topic", ex);
         }catch(Exception ex){
-        
+            Logger.getLogger(ProcessTopicMessageDrivenBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

@@ -6,6 +6,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -48,7 +49,7 @@ public class Topic implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date createAt = new Date();
     @OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="topic")
-    private List<Tweet> tweets;
+    private List<Tweet> tweets = new ArrayList<>();
     @ManyToOne
     private User user;
 

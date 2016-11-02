@@ -6,11 +6,9 @@
 package beans;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import models.Tweet;
 import services.TweetsServiceBeanLocal;
 
@@ -21,7 +19,7 @@ import services.TweetsServiceBeanLocal;
  * @author sergio
  */
 @ManagedBean(name = "tweetsManagedBean")
-@ViewScoped
+@SessionScoped
 public class TweetsManagedBean {
     
     @EJB
