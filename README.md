@@ -1,4 +1,4 @@
-# sentiment
+# Twitter Sentiment Analysis
 Sentiment Analysis Twitter with Stanford CoreNLP
 
 JDBCRealm configurations for this application
