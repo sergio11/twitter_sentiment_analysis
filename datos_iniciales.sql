@@ -30,12 +30,12 @@ INSERT INTO SERGIO11.GROUPS ("NAME", DESCRIPTION)
 	Otro sólo tiene el rol usuario por lo que no podrá acceder a "temas" o "usuarios"
 
 INSERT INTO SERGIO11.USERS (USER_NAME, BIRTHDAY, EMAIL, LASTNAME, MOBILE, "NAME", PASSWD, PROVINCE_ID) 
-	VALUES ('sergio11', '2016-10-29', 'sss4esob@gmail.com', 'Sánchez', 673445695, 'Sergio', 'eaa66f1a644c8a09ca3c584f415c0c49', NULL);
+	VALUES ('sergio11', '2016-10-29', 'sss4esob@gmail.com', 'Sánchez', 657894575, 'Sergio', 'eaa66f1a644c8a09ca3c584f415c0c49', NULL);
 INSERT INTO SERGIO11.USERS (USER_NAME, BIRTHDAY, EMAIL, LASTNAME, MOBILE, "NAME", PASSWD, PROVINCE_ID) 
-	VALUES ('Marcos74', '2015-12-07', 'maserna@gmail.com', 'De la Serna', 673445695, 'Marcos', 'eaa66f1a644c8a09ca3c584f415c0c49', 1);
+	VALUES ('pepito74', '2015-12-07', 'pepito@gmail.com', 'Martín', 657894575, 'Pepito', 'eaa66f1a644c8a09ca3c584f415c0c49', 1);
 
 INSERT INTO SERGIO11.USER_GROUPS (USER_NAME, GROUP_NAME) 
-	VALUES ('Marcos74', 'USER');
+	VALUES ('pepito74', 'USER');
 INSERT INTO SERGIO11.USER_GROUPS (USER_NAME, GROUP_NAME) 
 	VALUES ('sergio11', 'ADMINISTRATOR');
 INSERT INTO SERGIO11.USER_GROUPS (USER_NAME, GROUP_NAME) 
