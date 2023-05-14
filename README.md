@@ -1,4 +1,4 @@
-# A Twitter Sentiment Analysis tool build with JSF + Primefaces and Stanford CoreNLP
+# A Twitter Sentiment Analysis tool build with JSF (Java Server Faces) + Primefaces and Stanford CoreNLP
 Sentiment Analysis Twitter with Stanford CoreNLP
 
 ## JDBCRealm configurations for this application
@@ -10,3 +10,15 @@ Sentiment Analysis Twitter with Stanford CoreNLP
 ![Sentimiento](screenshots/topic_sentiments.PNG "Sentimiento")
 ## Visualización de resultados
 ![Resultados](screenshots/results.PNG "Resultados")
+
+## Visitors Count
+
+<img width="auto" src="https://profile-counter.glitch.me/twitter_sentiment_analysis/count.svg" />
+
+## Please Share & Star the repository to keep me motivated.
+  <a href = "https://github.com/sergio11/twitter_sentiment_analysis/stargazers">
+     <img src = "https://img.shields.io/github/stars/sergio11/twitter_sentiment_analysis" />
+  </a>
+  <a href = "https://twitter.com/SergioReact418">
+     <img src = "https://img.shields.io/twitter/url?label=follow&style=social&url=https%3A%2F%2Ftwitter.com%2FSergioReact418" />
+  </a>
