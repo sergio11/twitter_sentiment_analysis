@@ -1,4 +1,4 @@
-# Twitter Sentiment Analysis
+# A Twitter Sentiment Analysis tool build with JSF + Primefaces and Stanford CoreNLP
 Sentiment Analysis Twitter with Stanford CoreNLP
 
 ## JDBCRealm configurations for this application
